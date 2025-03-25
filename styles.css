@@ -1,0 +1,10 @@
+/* Additional custom styles if needed */
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+/* Custom scrollbar for datalist */
+datalist {
+    max-height: 200px;
+    overflow-y: auto;
+}

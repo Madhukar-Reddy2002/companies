@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Loan Application</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <form id="businessLoanForm" class="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-8">
+            <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Business Loan Application</h2>
+            
+            <!-- Business Name -->
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="businessName">
+                    Business Name*
+                </label>
+                <input 
+                    type="text" 
+                    id="businessName" 
+                    autocomplete="off"
+                    list="companyNames"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                    placeholder="Enter your business name"
+                    required
+                >
+                <datalist id="companyNames">
+                    <!-- Will be populated by JavaScript -->
+                </datalist>
+            </div>
+
+            <!-- Business Details Row -->
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="foundedYear">
+                        Founded Year
+                    </label>
+                    <input 
+                        type="number" 
+                        id="foundedYear"
+                        min="1900" 
+                        max="2024"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="Year founded"
+                    >
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="industry">
+                        Industry
+                    </label>
+                    <select 
+                        id="industry"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    >
+                        <option value="">Select Industry</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Retail">Retail</option>
+                        <option value="Manufacturing">Manufacturing</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Food & Beverage">Food & Beverage</option>
+                        <option value="Construction">Construction</option>
+                        <option value="Professional Services">Professional Services</option>
+                        <option value="Education">Education</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="E-commerce">E-commerce</option>
+                        <option value="Automotive">Automotive</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Financial Details Row -->
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="annualRevenue">
+                        Annual Revenue ($)
+                    </label>
+                    <input 
+                        type="number" 
+                        id="annualRevenue"
+                        min="0"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="Annual Revenue"
+                    >
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="requestedFunding">
+                        Requested Funding ($)*
+                    </label>
+                    <input 
+                        type="number" 
+                        id="requestedFunding"
+                        min="1000"
+                        required
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="Loan Amount"
+                    >
+                </div>
+            </div>
+
+            <!-- Address Details -->
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="companyAddress">
+                    Company Address
+                </label>
+                <input 
+                    type="text" 
+                    id="companyAddress"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    placeholder="Street Address"
+                >
+            </div>
+
+            <!-- State and Country Row -->
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="state">
+                        State
+                    </label>
+                    <select 
+                        id="state"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    >
+                        <option value="">Select State</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="country">
+                        Country
+                    </label>
+                    <input 
+                        type="text" 
+                        id="country"
+                        value="United States"
+                        readonly
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-200"
+                    >
+                </div>
+            </div>
+
+            <!-- Owner Contact Information -->
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="ownerName">
+                        Owner Name
+                    </label>
+                    <input 
+                        type="text" 
+                        id="ownerName"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="Business Owner Name"
+                    >
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+                        Contact Email
+                    </label>
+                    <input 
+                        type="email" 
+                        id="email"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="Email Address"
+                    >
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div>
+                <button 
+                    type="submit"
+                    class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline"
+                >
+                    Submit Loan Application
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
