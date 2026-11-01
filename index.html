@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Fast Business Loans with Flexible Terms | Kapitus</title>
-<meta name="description" content="See your business financing options in minutes. Funding from $5K to $5M. Apply online in minutes and get approved in as little as 24 hours.">
+<title>Small Business Loans: Fast, Flexible Funding up to $5M | Kapitus</title>
+<meta name="description" content="Explore small business loan options for working capital, equipment, inventory and growth. Compare up to 6 offers, financing up to $5M, with decisions in as little as 4 hours.">
 <meta name="theme-color" content="#3C1B50">
-<meta property="og:title" content="Fast Business Loans with Flexible Terms | Kapitus">
-<meta property="og:description" content="Apply online in minutes and get approved in as little as 24 hours. Funding from $5K to $5M.">
+<meta property="og:title" content="Small Business Loans: Fast, Flexible Funding up to $5M | Kapitus">
+<meta property="og:description" content="Compare up to 6 small business loan offers. Financing up to $5M, with decisions in as little as 4 hours.">
 <meta property="og:type" content="website">
 <!-- Paid-search landing page: uncomment if this URL should stay out of organic search -->
 <!-- <meta name="robots" content="noindex, nofollow"> -->
@@ -20,7 +20,7 @@
    HOW THIS FILE IS ORGANISED
    Each section has the same number in its CSS, its HTML and its JS.
    00 Tokens + base | 01 Header | 02 Hero + application card | 03 Why Kapitus
-   04 Fit check | 05 Reviews carousel | 06 Questions (FAQ + Ask) | 07 Footer
+   02b Offer strip | 04 Fit check | 05 Reviews carousel | 06 Questions (FAQ + Ask) | 07 Footer
    08 Floating UI (mobile CTA bar + scroll to top) | 09 Application form (focus mode + 20 screens)
    Media queries live inside each section, so you can edit one block safely.
    Compact build: smaller type, tighter spacing and smaller tiles, especially on mobile.
@@ -166,6 +166,20 @@ h2.title{font-size:clamp(22px,2.6vw,30px);line-height:1.15;letter-spacing:-.025e
   .proof div{min-width:0}
   .proof strong{font-size:16px}
   .proof span{font-size:11.5px;line-height:1.3;display:block}
+}
+
+
+/* ============ 02b OFFER STRIP ============ */
+.offers{padding:0;background:linear-gradient(135deg,#3C1B50,#2a1139);color:#fff}
+.offers-grid{display:grid;grid-template-columns:repeat(3,1fr)}
+.offer{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px 12px;gap:1px}
+.offer + .offer{border-left:1px solid rgba(255,255,255,.16)}
+.o-pre{font-size:13px;color:rgba(255,255,255,.78)}
+.offer strong{font-size:26px;line-height:1.15;font-weight:800;letter-spacing:-.02em}
+@media (max-width:640px){
+  .offer{padding:10px 6px}
+  .o-pre{font-size:11px;line-height:1.25}
+  .offer strong{font-size:18px}
 }
 
 /* ============ 03 WHY KAPITUS ============ */
@@ -381,7 +395,10 @@ body.form-mode .card{max-width:640px;margin:0 auto;padding:26px 28px 24px}
 body.form-mode .card::before{display:none}
 body.form-mode .foot{background:var(--p900)}
 body.form-mode .legal{border-top:0;padding-top:20px}
-.fmeta{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:-6px 0 14px}
+.fmeta{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:-6px 0 14px}
+.fm-l{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px;min-width:0}
+.fclose{display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;background:none;border:1.5px solid var(--chip-border);border-radius:99px;padding:6px 12px;min-height:36px;font-weight:700;font-size:13px;color:var(--text);cursor:pointer;transition:border-color .15s,background .15s}
+.fclose:hover{border-color:var(--accent);background:var(--lav)}
 .fcat{font-weight:800;font-size:14px;color:var(--accent-ink);letter-spacing:.01em}
 .fcount{font-size:13px;color:var(--muted);font-weight:600}
 .fbody h2{outline:none}
@@ -418,8 +435,6 @@ body.form-mode .legal{border-top:0;padding-top:20px}
 .fnav{display:flex;justify-content:space-between;gap:12px;margin-top:20px}
 .fnav .btn{width:auto;min-width:130px}
 .fnav .btn-primary{flex:1;max-width:260px;margin-left:auto}
-.fcall{margin:14px 0 0;text-align:center;font-size:13px;color:var(--muted)}
-.fcall a{color:var(--accent-ink);font-weight:700}
 .resume .btn{width:100%;margin-top:6px}
 .drop{border:2px dashed var(--chip-border);border-radius:14px;padding:22px 16px;text-align:center;background:var(--surface2);transition:border-color .15s,background .15s}
 .drop.over{border-color:var(--accent);background:var(--lav)}
@@ -489,10 +504,10 @@ body.form-mode .legal{border-top:0;padding-top:20px}
 <section class="hero" id="hero">
   <div class="wrap hero-grid">
     <div class="hero-copy">
-      <h1>Fast business loans with flexible terms</h1>
-      <p class="lede">Tell us about your business and see your financing options. Apply online in minutes and get approved in as little as 24 hours.</p>
-      <div class="quals" role="group" aria-label="Qualifications">
-        <div class="quals-title">Qualifications</div>
+      <h1>Fast small business loans with flexible terms</h1>
+      <p class="lede">Explore small business loan options for working capital, equipment, inventory and growth. Tell us about your business and see your options in minutes.</p>
+      <div class="quals" role="group" aria-label="Typical qualifications">
+        <div class="quals-title">Typical qualifications</div>
         <div class="qual"><strong>2+ years</strong><span>in business</span></div>
         <div class="qual"><strong>650+</strong><span>credit score</span></div>
         <div class="qual"><strong>$250K+</strong><span>annual revenue</span></div>
@@ -504,13 +519,15 @@ body.form-mode .legal{border-top:0;padding-top:20px}
       <!-- The card is the application. Section 09 (script) renders every screen into #fbody. -->
       <div class="card" id="card">
         <div class="progress" id="fprog" role="progressbar" aria-label="Application progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="5"><i id="bar"></i></div>
-        <div class="fmeta" id="fmeta" hidden><span class="fcat" id="fcat">Business details</span><span class="fcount" id="fcount"></span></div>
+        <div class="fmeta" id="fmeta" hidden>
+          <div class="fm-l"><span class="fcat" id="fcat">Business details</span><span class="fcount" id="fcount"></span></div>
+          <button type="button" class="fclose" id="fclose" aria-label="Close the application to read more. Your progress is saved."><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg><span>Close</span></button>
+        </div>
         <div class="fbody" id="fbody"></div>
         <div class="fnav" id="fnav" hidden>
           <button type="button" class="btn btn-ghost" id="fback">Go back</button>
           <button type="button" class="btn btn-primary" id="fnext">Continue</button>
         </div>
-        <p class="fcall" id="fcall" hidden>Questions? Call a financing specialist at <a href="tel:+16466307618">(646) 630-7618</a>.</p>
         <noscript><p class="range-note">Please enable JavaScript to apply here, or call <a href="tel:+16466307618">(646) 630-7618</a>.</p></noscript>
       </div>
     </div>
@@ -525,11 +542,21 @@ body.form-mode .legal{border-top:0;padding-top:20px}
   </div>
 </section>
 
+<!-- ============ 02b OFFER STRIP: the three claims used in the ads and on the other Kapitus pages ============ -->
+<section class="offers" aria-label="Small business financing at a glance">
+  <div class="wrap offers-grid">
+    <div class="offer"><span class="o-pre">Compare up to</span><strong>6 offers</strong></div>
+    <div class="offer"><span class="o-pre">Financing up to</span><strong>$5M</strong></div>
+    <div class="offer"><span class="o-pre">Decisions in as little as</span><strong>4 hours</strong></div>
+  </div>
+</section>
+
 <!-- ============ 03 WHY KAPITUS ============ -->
 <section id="why">
   <div class="wrap">
     <div class="sec-head">
-      <h2 class="title">Why business owners choose Kapitus</h2>
+      <h2 class="title">Why small business owners choose Kapitus</h2>
+      <p class="lede2">Loans for small business owners, with a financing specialist beside you.</p>
     </div>
     <div class="why-grid">
       <div class="why-media">
@@ -545,7 +572,7 @@ body.form-mode .legal{border-top:0;padding-top:20px}
         </div>
         <div class="why-item">
           <div class="why-ico" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.6c0-1 1-1.7 2.5-1.7s2.5.7 2.5 1.7-1 1.6-2.5 1.9-2.5.8-2.5 1.9 1 1.7 2.5 1.7 2.5-.7 2.5-1.7"/></svg></div>
-          <div><h3>Funding from $5K up to $5M</h3><p>From a small cash-flow gap to a major expansion. The amount depends on your business profile.</p></div>
+          <div><h3>Funding from $5K up to $5M</h3><p>From working capital and daily operations to equipment, inventory and expansion. The amount depends on your business profile.</p></div>
         </div>
         <div class="why-item">
           <div class="why-ico" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg></div>
@@ -563,7 +590,7 @@ body.form-mode .legal{border-top:0;padding-top:20px}
 <section class="fit" id="fit">
   <div class="wrap">
     <div class="sec-head">
-      <h2 class="title">See how your business lines up</h2>
+      <h2 class="title">See how your small business lines up</h2>
       <p class="lede2">Adjust the inputs and the result updates as you go. No personal details needed.</p>
     </div>
     <div class="fit-card">
@@ -633,8 +660,20 @@ body.form-mode .legal{border-top:0;padding-top:20px}
   <div class="wrap">
     <div class="qa-grid">
       <div class="qa-faq">
-        <h2 class="title">Common questions</h2>
-        <div class="faq" id="faqList"></div>
+        <h2 class="title">Small business loan questions</h2>
+        <!-- Original FAQ from kapitus.com/flexible-terms-to-meet-business-needs. Keep the wording identical to the source page. -->
+        <div class="faq" id="faqList">
+          <details><summary>What is the minimum credit score for a small business loan financed by Kapitus?</summary>
+            <div class="ans"><p>At this time, the minimum credit score requirement for our small business financing is 650.</p></div></details>
+          <details><summary>How is working with an online lender different than working with a traditional bank?</summary>
+            <div class="ans"><p>There are a variety of reasons that business owners will choose one type of provider over another – and each has its advantages and disadvantages. To further explore the differences, check out <a href="https://kapitus.com/blog/manage-your-money/financing/traditional-bank-vs-alternative-lender-which-is-better-for-your-small-business-kapitus/" target="_blank" rel="noopener">Traditional Bank vs. Alternative Lender</a>.</p></div></details>
+          <details><summary>What other business financing options can I access by working with Kapitus?</summary>
+            <div class="ans">
+              <p>Kapitus can help you explore a full suite of financing products and help you explore all your options at the same time. Did you know that a term loan is not always the best option in every situation? Depending on why you need financing, the speed at which you need it, and terms you would like to see, there are alternative financing products that could be a better fit. Some additional financing options we can help you explore include:</p>
+              <ul><li>Business line of credit.</li><li>Revenue-based financing.</li><li>Equipment financing.</li><li>Invoice factoring.</li><li>Purchase order financing.</li></ul>
+              <p class="disclosure">Product availability is subject to confirmation of eligibility and underwriting. Products may vary based on credit profile and the state in which your business is located. Certain products may not be available in all states or to all customers. Business loans are made or brokered by Kapitus LLC in California pursuant to California Finance Lenders License No. 60DBO-198798. SBA loans, business lines of credit, invoice factoring, and purchase order financing are offered only by members of Kapitus’s financing network and not by Kapitus directly.</p>
+            </div></details>
+        </div>
       </div>
       <div class="qa-ask">
         <div class="askbox">
@@ -970,20 +1009,7 @@ window.KAP = (function(){
 </script>
 
 <script>
-/* ============ 06 QUESTIONS (a): ORIGINAL FAQ, copied from kapitus.com/flexible-terms-to-meet-business-needs ============
-   EDIT HERE if the live page's FAQ changes. Keep the wording identical to the source page. */
-var FAQ = [
- {q:"What is the minimum credit score for a small business loan financed by Kapitus?",
-  html:"<p>At this time, the minimum credit score requirement for our small business financing is 650.</p>"},
- {q:"How is working with an online lender different than working with a traditional bank?",
-  html:"<p>There are a variety of reasons that business owners will choose one type of provider over another \u2013 and each has its advantages and disadvantages. To further explore the differences, check out <a href=\"https://kapitus.com/blog/manage-your-money/financing/traditional-bank-vs-alternative-lender-which-is-better-for-your-small-business-kapitus/\" target=\"_blank\" rel=\"noopener\">Traditional Bank vs. Alternative Lender</a>.</p>"},
- {q:"What other business financing options can I access by working with Kapitus?",
-  html:"<p>Kapitus can help you explore a full suite of financing products and help you explore all your options at the same time. Did you know that a term loan is not always the best option in every situation? Depending on why you need financing, the speed at which you need it, and terms you would like to see, there are alternative financing products that could be a better fit. Some additional financing options we can help you explore include:</p>"
-    + "<ul><li>Business line of credit.</li><li>Revenue-based financing.</li><li>Equipment financing.</li><li>Invoice factoring.</li><li>Purchase order financing.</li></ul>"
-    + "<p class=\"disclosure\">Product availability is subject to confirmation of eligibility and underwriting. Products may vary based on credit profile and the state in which your business is located. Certain products may not be available in all states or to all customers. Business loans are made or brokered by Kapitus LLC in California pursuant to California Finance Lenders License No. 60DBO-198798. SBA loans, business lines of credit, invoice factoring, and purchase order financing are offered only by members of Kapitus\u2019s financing network and not by Kapitus directly.</p>"}
-];
-
-/* ============ 06 QUESTIONS (b): ASK BOX knowledge base ============
+/* ============ 06 QUESTIONS (a): ASK BOX knowledge base ============
    Answers may only use Kapitus pages: the flexible-terms page, the /simple/ application, and the Business Loans page.
    check:true = needs Kapitus / compliance confirmation before launch (not shown to visitors).
    link:{text,href} adds a link under the answer. */
@@ -1008,8 +1034,11 @@ var KB = [
   a:["We provide $5K to $5M in financing. The amount you’re offered depends on your business profile, so not every business qualifies for the full range."],
   src:"application and Business Loans page (the flexible-terms form shows a $100,000 minimum, so confirm the floor)", kw:"amount much funding borrow maximum max loan largest biggest smallest", rx:/(how much (can|could|will).*(get|borrow|fund|loan|approv)|maximum|max loan|loan amount|borrow)/},
  {id:"speed", q:"How fast can I get funded?",
-  a:["You can apply online in minutes, get approved in as little as 24 hours, and receive funding quickly."],
-  src:"flexible-terms page", kw:"fast quick speed days hours funded funding approval approved time when", rx:/(how (fast|quick|soon)|how long.*(fund|approv|get (the )?money)|turnaround|same day|24 hours)/},
+  a:["Decisions can come in as little as 4 hours.","You can apply online in minutes, get approved in as little as 24 hours, and receive funding quickly."],
+  src:"Kapitus landing pages (4-hour decisions) and flexible-terms page (24-hour approval)", kw:"fast quick speed days hours funded funding approval approved decision time when", rx:/(how (fast|quick|soon)|how long.*(fund|approv|get (the )?money|decision)|decision|turnaround|same day|24 hours|4 hours)/},
+ {id:"offers", q:"Can I compare offers?",
+  a:["Yes. You can compare up to 6 offers."],
+  src:"Kapitus landing pages", kw:"compare offer offers multiple several options six", rx:/((multiple|more than one|several|compare).*(offer|option)|(how many|any) offers?|compare)/},
  {id:"terms", q:"What are the repayment terms?",
   a:["Business loan terms run from 6 to 24 months, with daily, weekly or monthly payment options."],
   src:"Business Loans page", kw:"term terms repayment repay payment payments monthly weekly daily months", rx:/(repay|payment (options|schedule|terms|frequency)|(daily|weekly|monthly) payments?|\bterms?\b|how long (to|do i) pay)/, not:/(terms (of|and)|conditions)/},
@@ -1052,20 +1081,14 @@ var KB = [
 </script>
 
 <script>
-/* ============ 06 QUESTIONS (c): FAQ list + Ask engine (retrieves only from KB; never invents an answer) ============ */
+/* ============ 06 QUESTIONS (b): Ask engine (retrieves only from KB; never invents an answer) ============ */
 (function(){
-  var K = window.KAP, $ = K.$, el = K.el, cfg = K.cfg;
+  var K = window.KAP, $ = K.$, $$ = K.$$, el = K.el, cfg = K.cfg;
   if(!$("#askForm")) return;
   var T = cfg.typical;
 
-  /* original FAQ list */
-  var list = $("#faqList");
-  FAQ.forEach(function(f, i){
-    var d = document.createElement("details"), s = document.createElement("summary"); s.textContent = f.q; d.appendChild(s);
-    var a = el("div","ans"); a.innerHTML = f.html; d.appendChild(a);
-    d.addEventListener("toggle", function(){ if(d.open) K.track("faq_open", {index:i}); });
-    list.appendChild(d);
-  });
+  /* original FAQ (static HTML in section 06): just track which questions people open */
+  $$("#faqList details").forEach(function(d, i){ d.addEventListener("toggle", function(){ if(d.open) K.track("faq_open", {index:i}); }); });
 
   var STOP = new Set("the and for you your can are but not with have has had this that from what when how will would could should about any get got does did its into our out all one who why where than then them they there their been being was were just only also very more most some such like want need".split(" "));
   function stem(w){ return w.length>4 && /s$/.test(w) && !/ss$/.test(w) ? w.slice(0,-1) : w; }
@@ -1257,7 +1280,7 @@ var KB = [
   var K = window.KAP, $ = K.$, $$ = K.$$, el = K.el, cfg = K.cfg, F = cfg.form, st = K.state;
   var card = $("#card"); if(!card) return;
   var body=$("#fbody"), bar=$("#bar"), prog=$("#fprog"), meta=$("#fmeta"), catEl=$("#fcat"), cntEl=$("#fcount"),
-      nav=$("#fnav"), backBtn=$("#fback"), nextBtn=$("#fnext"), callEl=$("#fcall");
+      nav=$("#fnav"), backBtn=$("#fback"), nextBtn=$("#fnext"), closeBtn=$("#fclose");
   var reduce = K.reduce, formMode = false, finished = false, idx = 0, ctrl = null, leaving = false, advTimer = null;
   var A = {};                                   /* all answers (personal ones never leave memory) */
   var SAFE = ["amount","uses","usesOther","industry","industryOther","entity","entityOther","startMonth","startYear","ownership","revenue","loans","loanBalance"];
@@ -1764,7 +1787,7 @@ var KB = [
     ctrl = builders[s.build](s, box) || {};
     var pct = Math.max(5, Math.round(((idx+1) / STEPS.length) * 100));
     bar.style.width = pct + "%"; prog.setAttribute("aria-valuenow", String(pct));
-    meta.hidden = !formMode; nav.hidden = !formMode; callEl.hidden = !formMode;
+    meta.hidden = !formMode; nav.hidden = !formMode;
     if(formMode){
       catEl.textContent = CATS[s.cat]; cntEl.textContent = "Step " + (idx+1) + " of " + STEPS.length;
       backBtn.textContent = idx===0 ? "Back to overview" : "Go back";
@@ -1775,10 +1798,10 @@ var KB = [
     }
   }
   function renderResume(){
-    meta.hidden = true; nav.hidden = true; callEl.hidden = true;
+    meta.hidden = true; nav.hidden = true;
     var pct = Math.max(5, Math.round(((idx+1) / STEPS.length) * 100)); bar.style.width = pct + "%"; prog.setAttribute("aria-valuenow", String(pct));
-    var h = el("h2",null,"Welcome back"); body.appendChild(h);
-    body.appendChild(el("p","sub","Your $" + K.fmt(A.amount || cfg.defaultAmount) + " request is saved. You’re on " + CATS[STEPS[idx].cat].toLowerCase() + ", step " + (idx+1) + " of " + STEPS.length + "."));
+    var h = el("h2",null,"Pick up where you left off"); body.appendChild(h);
+    body.appendChild(el("p","sub","Your $" + K.fmt(A.amount || cfg.defaultAmount) + " request is saved. You’re on " + CATS[STEPS[idx].cat].toLowerCase() + ", step " + (idx+1) + " of " + STEPS.length + ". Personal details stay only while this page is open."));
     var box = el("div","resume");
     var go = el("button","btn btn-primary"); go.type = "button"; go.setAttribute("data-cta",""); go.dataset.loc = "resume"; go.dataset.start = "Get started"; go.dataset["continue"] = "Continue your application"; go.textContent = "Continue your application";
     var so = el("button","back","Start over"); so.type = "button";
@@ -1786,7 +1809,7 @@ var KB = [
     box.appendChild(go); box.appendChild(so); body.appendChild(box);
   }
   function renderThanks(){
-    meta.hidden = true; nav.hidden = true; callEl.hidden = false; bar.style.width = "100%"; prog.setAttribute("aria-valuenow","100");
+    meta.hidden = true; nav.hidden = true; bar.style.width = "100%"; prog.setAttribute("aria-valuenow","100");
     var name = A.legal || A.dba || "";
     var tick = el("div","tick"); tick.innerHTML = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'; body.appendChild(tick);
     var h = el("h2",null,"Thank you" + (name ? ", " + name : "")); h.id = "ftitle"; h.tabIndex = -1; body.appendChild(h);
@@ -1816,6 +1839,10 @@ var KB = [
   function toTop(){ var r = card.getBoundingClientRect(); if(r.top < 0 || r.top > 120){ window.scrollTo({top: Math.max(0, window.scrollY + r.top - 70), behavior: "auto"}); } }
   nextBtn.addEventListener("click", next);
   backBtn.addEventListener("click", prev);
+  closeBtn.addEventListener("click", function(){     /* close at any step to read more; everything entered so far is kept */
+    K.track("form_close", {step:STEPS[idx].id, index:idx+1});
+    persist(); exitForm();
+  });
   card.addEventListener("keydown", function(e){
     if(e.key!=="Enter" || !formMode) return;
     var t = e.target; if(!t || t.tagName!=="INPUT" || t.type==="checkbox" || t.type==="file") return;
