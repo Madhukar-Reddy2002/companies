@@ -1,187 +1,1209 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Loan Application</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fast Business Loans with Flexible Terms | Kapitus</title>
+<meta name="description" content="See your business financing options in minutes. Funding from $5K to $5M, with funding in as little as 24 hours after approval.">
+<meta name="theme-color" content="#3C1B50">
+<meta property="og:title" content="Fast Business Loans with Flexible Terms | Kapitus">
+<meta property="og:description" content="See your business financing options in minutes. Funding from $5K to $5M.">
+<meta property="og:type" content="website">
+<!-- Paid-search landing page: uncomment if this URL should stay out of organic search -->
+<!-- <meta name="robots" content="noindex, nofollow"> -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* =====================================================================
+   HOW THIS FILE IS ORGANISED
+   Each section has the same number in its CSS, its HTML and its JS.
+   00 Tokens + base | 01 Header | 02 Hero + application card | 03 Why Kapitus
+   04 Fit check | 05 Reviews carousel | 06 Questions (FAQ + Ask) | 07 Footer
+   08 Floating UI (mobile CTA bar + scroll to top)
+   Media queries live inside each section, so you can edit one block safely.
+   ===================================================================== */
+
+/* ============ 00 TOKENS + BASE ============ */
+:root{
+  --p900:#2a1139; --p800:#3C1B50; --p700:#502566; --p600:#642587; --accent:#AD00FF; --accent-ink:#7a00b3;
+  --lav:#F7F0FB; --bg:#ffffff; --surface:#ffffff; --surface2:#FAFAFB; --text:#1d1b22; --muted:#5d5866;
+  --border:#e3dde9; --chip-border:#cfc7d8; --ok:#0f7a55; --ok-bg:#e6f6ef; --amber:#8a5200; --amber-bg:#fff3de;
+  --note:#f2ff62; --shadow:0 18px 50px rgba(42,17,57,.22); --radius:20px; --gap:20px; --head:68px;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --lav:#241a2e; --bg:#141018; --surface:#1d1724; --surface2:#221a2b; --text:#f3eef7; --muted:#b9b0c4;
+    --border:#372c43; --chip-border:#4d3f5c; --ok:#5fd6a6; --ok-bg:#12352a; --amber:#ffc46b; --amber-bg:#3a2a0e;
+    --accent-ink:#d58bff; --shadow:0 18px 50px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --lav:#241a2e; --bg:#141018; --surface:#1d1724; --surface2:#221a2b; --text:#f3eef7; --muted:#b9b0c4;
+  --border:#372c43; --chip-border:#4d3f5c; --ok:#5fd6a6; --ok-bg:#12352a; --amber:#ffc46b; --amber-bg:#3a2a0e;
+  --accent-ink:#d58bff; --shadow:0 18px 50px rgba(0,0,0,.5);
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 8px);scroll-behavior:smooth}
+@media (min-width:961px){html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + var(--head) + 8px)}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;font-family:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--p900)}
+img,svg{max-width:100%}
+a{color:inherit}
+button,textarea,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+.wrap{width:min(1180px,100% - 40px);margin-inline:auto}
+[hidden]{display:none!important}
+section{padding:80px 0}
+.sec-head{margin-bottom:32px;max-width:640px}
+h2.title{font-size:clamp(28px,3.4vw,40px);line-height:1.12;letter-spacing:-.03em;font-weight:800;margin:0 0 12px}
+.lede2{color:var(--muted);font-size:18px;margin:0}
+.skip{position:absolute;left:-999px;top:8px;background:#fff;color:var(--p800);padding:10px 14px;border-radius:8px;font-weight:700;z-index:100}
+.skip:focus{left:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;cursor:pointer;font-weight:700;border-radius:12px;padding:13px 22px;text-decoration:none;font-size:16px;min-height:48px;transition:transform .15s,background .15s}
+.btn-white{background:#fff;color:var(--p800)}
+.btn-white:hover{background:#f1e6f8}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 8px 22px rgba(173,0,255,.3)}
+.btn-primary:hover{background:#9700e0}
+.btn-primary:active{transform:translateY(1px)}
+.btn-ghost{background:transparent;color:var(--text);border:1.5px solid var(--chip-border)}
+.btn-sm{padding:9px 16px;min-height:40px;font-size:14px}
+.btn[disabled]{opacity:.45;cursor:not-allowed;box-shadow:none}
+.chip{border:1.5px solid var(--chip-border);background:var(--surface2);border-radius:12px;padding:12px 14px;font-weight:600;font-size:16px;cursor:pointer;min-height:48px;text-align:left;transition:border-color .15s,background .15s}
+.chip:hover{border-color:var(--accent)}
+.chip[aria-pressed="true"]{border-color:var(--accent);background:var(--lav);color:var(--accent-ink);font-weight:700;box-shadow:inset 0 0 0 1px var(--accent)}
+.stars{color:#e0b400;letter-spacing:2px}
+@media (max-width:960px){section{padding:56px 0}}
+
+/* ============ 01 HEADER ============ */
+.site-header{position:relative;z-index:20;background:var(--p900);color:#fff}
+@media (min-width:961px){.site-header{position:sticky;top:env(safe-area-inset-top,0px)}}
+.site-header .wrap{display:flex;align-items:center;justify-content:space-between;height:var(--head);gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:22px;letter-spacing:-.02em;text-decoration:none;color:#fff}
+.brand-mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--p600));display:grid;place-items:center}
+.header-right{display:flex;align-items:center;gap:20px}
+.phone{display:flex;align-items:center;gap:8px;text-decoration:none;font-weight:600;font-size:15px;color:#fff}
+.phone small{display:block;font-weight:500;opacity:.7;font-size:12px;line-height:1.1}
+.phone span{line-height:1.2}
+@media (max-width:960px){
+  .phone span{display:none}
+  .header-right .btn{display:none}
+}
+
+/* ============ 02 HERO + APPLICATION CARD ============ */
+.hero{position:relative;overflow:hidden;color:#fff;background:linear-gradient(135deg,#502566 0%,#3C1B50 52%,#642587 100%);padding:0}
+.hero::before{content:"";position:absolute;width:760px;height:760px;right:-180px;top:-260px;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(173,0,255,.55),rgba(173,0,255,0) 65%)}
+.hero::after{content:"";position:absolute;width:520px;height:520px;left:-220px;bottom:-300px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.10),rgba(255,255,255,0) 70%)}
+.hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.08fr .92fr;grid-template-areas:"copy card" "proof card";column-gap:56px;align-items:start;padding:64px 0 76px}
+.hero-copy{grid-area:copy}
+.hero-proof{grid-area:proof}
+#apply{grid-area:card;align-self:center}
+.hero h1{font-size:clamp(36px,4.6vw,58px);line-height:1.05;letter-spacing:-.035em;font-weight:800;margin:0 0 18px;max-width:14ch}
+.lede{font-size:19px;max-width:46ch;margin:0 0 30px;color:rgba(255,255,255,.88)}
+.quals{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid rgba(255,255,255,.28);border-radius:16px;background:rgba(255,255,255,.08);backdrop-filter:blur(4px);max-width:520px}
+.quals-title{grid-column:1/-1;padding:14px 20px 0;font-weight:700;font-size:15px;color:rgba(255,255,255,.85)}
+.qual{padding:10px 20px 18px}
+.qual + .qual{border-left:1px solid rgba(255,255,255,.18)}
+.qual strong{display:block;font-size:30px;line-height:1.1;font-weight:800;letter-spacing:-.02em}
+.qual span{font-size:14px;color:rgba(255,255,255,.82)}
+.hero-link{display:inline-block;margin-top:16px;font-weight:600;color:#fff;text-underline-offset:4px}
+.proof{display:flex;flex-wrap:wrap;gap:28px;margin-top:34px}
+.proof div{min-width:120px}
+.proof strong{display:block;font-size:24px;font-weight:800;letter-spacing:-.02em}
+.proof span{font-size:14px;color:rgba(255,255,255,.78)}
+.proof .stars{color:var(--note)}
+/* application card */
+.card{position:relative;background:var(--surface);color:var(--text);border-radius:22px;padding:34px;box-shadow:var(--shadow);max-width:520px;width:100%;margin-left:auto}
+.card::before{content:"";position:absolute;inset:-14px -14px auto auto;width:100%;height:100%;border-radius:26px;border:1.5px solid rgba(255,255,255,.28);z-index:-1}
+.progress{height:6px;border-radius:99px;background:var(--border);overflow:hidden;margin-bottom:22px}
+.progress i{display:block;height:100%;width:6%;background:var(--accent);border-radius:99px;transition:width .35s}
+.card h2{font-size:26px;line-height:1.2;letter-spacing:-.02em;margin:0 0 6px;font-weight:800}
+.card .sub{margin:0 0 20px;color:var(--muted);font-size:15px}
+.welcome{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--lav);border-radius:12px;padding:10px 14px;margin:-4px 0 18px;font-size:14px;font-weight:600}
+.linkbtn{background:none;border:0;padding:6px 0;color:var(--accent-ink);font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px;min-height:36px}
+.field{position:relative}
+.field .cur{position:absolute;left:18px;top:50%;transform:translateY(-50%);font-weight:800;font-size:24px;color:var(--muted)}
+.field input{width:100%;height:68px;border:1.5px solid var(--chip-border);border-radius:14px;background:var(--surface2);color:var(--text);font-weight:800;font-size:28px;line-height:1;padding:0 18px 0 42px;letter-spacing:-.02em}
+.field input:focus{border-color:var(--accent);outline:3px solid rgba(173,0,255,.25);outline-offset:0}
+.field[data-invalid="true"] input{border-color:#d4364c}
+.err{min-height:22px;margin:8px 2px 14px;color:#d4364c;font-size:14px;font-weight:600}
+.card .btn{width:100%}
+.range-note{margin:16px 0 0;padding:14px 16px;border-radius:12px;background:var(--lav);font-size:15px}
+.range-note b{font-weight:800}
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0 20px}
+.back{background:none;border:0;color:var(--muted);font-weight:600;cursor:pointer;padding:12px 4px;margin-top:4px;text-decoration:underline;text-underline-offset:4px;min-height:44px}
+.tick{width:48px;height:48px;border-radius:50%;background:var(--ok-bg);color:var(--ok);display:grid;place-items:center;margin-bottom:14px}
+.preview-note{margin:12px 0 0;font-size:13px;color:var(--muted)}
+@media (max-width:960px){
+  .hero-grid{grid-template-columns:1fr;grid-template-areas:"copy" "card" "proof";row-gap:34px;padding:36px 0 52px}
+  #apply{align-self:auto}
+  .card{margin:0 auto}
+  .card::before{display:none}
+}
+@media (max-width:520px){
+  .hero h1{max-width:none}
+  .lede{font-size:17px;margin-bottom:22px}
+  .qual{padding:8px 12px 14px}
+  .qual strong{font-size:22px}
+  .qual span{font-size:13px}
+  .quals-title{padding:12px 12px 0}
+  .card{padding:24px 20px}
+  .chips{grid-template-columns:1fr}
+  .proof{gap:20px}
+}
+
+/* ============ 03 WHY KAPITUS ============ */
+.why-grid{display:grid;grid-template-columns:.9fr 1.1fr;border-radius:24px;overflow:hidden;border:1.5px solid var(--border);background:var(--surface)}
+/* Image slot: drop an <img> as the first child of .why-media (see HTML comment). Without an image the gradient + 20+ stat stands on its own. */
+.why-media{position:relative;min-height:440px;background:linear-gradient(160deg,var(--p800),var(--p600));color:#fff;display:flex;flex-direction:column;justify-content:flex-end;padding:40px;overflow:hidden}
+.why-media::before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(173,0,255,.5),rgba(173,0,255,0) 68%);right:-120px;top:-100px}
+.why-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.why-media img + .why-stat::before{content:"";position:absolute;inset:-200px -40px -40px -40px;background:linear-gradient(to top,rgba(42,17,57,.8),rgba(42,17,57,0));z-index:-1}
+.why-stat{position:relative;z-index:1;font-size:clamp(64px,8vw,104px);line-height:.9;font-weight:800;letter-spacing:-.05em}
+.why-stat small{display:block;font-size:18px;font-weight:600;letter-spacing:0;margin-top:12px;color:rgba(255,255,255,.88)}
+.why-list{display:flex;flex-direction:column}
+.why-item{flex:1;display:grid;grid-template-columns:48px 1fr;gap:18px;padding:30px 36px;align-items:center}
+.why-item + .why-item{border-top:1.5px solid var(--border)}
+.why-ico{width:48px;height:48px;border-radius:14px;background:var(--lav);color:var(--accent-ink);display:grid;place-items:center}
+.why-item h3{margin:0 0 6px;font-size:21px;letter-spacing:-.02em;line-height:1.2}
+.why-item p{margin:0;color:var(--muted)}
+.why-item blockquote{margin:14px 0 0;padding:12px 16px;border-left:4px solid var(--accent);background:var(--lav);border-radius:0 12px 12px 0;font-weight:600;font-size:15px}
+.why-item blockquote cite{display:block;font-style:normal;font-weight:500;font-size:13px;color:var(--muted);margin-top:4px}
+@media (max-width:960px){
+  .why-grid{grid-template-columns:1fr}
+  .why-media{min-height:190px;padding:26px 24px}
+  .why-stat{font-size:60px}
+  .why-stat small{font-size:16px;margin-top:8px}
+  .why-item{padding:22px 20px}
+}
+
+/* ============ 04 FIT CHECK (live, no clicks needed) ============ */
+.fit{background:var(--lav)}
+.fit-card{background:var(--surface);border:1.5px solid var(--border);border-radius:24px;padding:32px;box-shadow:0 10px 30px rgba(42,17,57,.10)}
+.fit-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
+.ctl-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 12px;margin-bottom:12px}
+.ctl .lbl,.ctl label{font-weight:700;font-size:17px}
+.val{font-weight:800;font-size:17px;color:var(--accent-ink);white-space:nowrap}
+.val.idle{color:var(--muted);font-weight:600;font-size:15px}
+.range-wrap{position:relative;height:36px}
+.range-bar{position:absolute;left:0;right:0;top:14px;height:8px;border-radius:99px;background:var(--border)}
+.range-fill{position:absolute;left:0;top:14px;height:8px;border-radius:99px;background:var(--accent);width:calc(14px + (100% - 28px) * var(--p,0))}
+.range-wrap input{position:absolute;inset:0;width:100%;height:36px;margin:0;background:transparent;-webkit-appearance:none;appearance:none;cursor:pointer;touch-action:pan-y}
+.range-wrap input::-webkit-slider-runnable-track{height:36px;background:transparent}
+.range-wrap input::-moz-range-track{height:36px;background:transparent}
+.range-wrap input::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;margin-top:4px;border-radius:50%;background:#fff;border:7px solid var(--accent);box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.range-wrap input::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#fff;border:7px solid var(--accent);box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.ticks{display:flex;justify-content:space-between;margin-top:2px;font-size:12px;color:var(--muted);font-weight:600}
+.ticks span{flex:1;text-align:center}
+.ticks span:first-child{text-align:left}
+.ticks span:last-child{text-align:right}
+.rev-field{position:relative}
+.rev-field .cur{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-weight:800;font-size:20px;color:var(--muted)}
+.rev-field input{width:100%;height:56px;border:1.5px solid var(--chip-border);border-radius:14px;background:var(--surface2);color:var(--text);font-weight:800;font-size:20px;padding:0 16px 0 38px}
+.rev-field input:focus{border-color:var(--accent);outline:3px solid rgba(173,0,255,.25);outline-offset:0}
+.hint{margin:8px 2px 0;font-size:13px;color:var(--muted)}
+.cchips{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cchips .chip{text-align:center;padding:10px 8px;min-height:50px;font-size:15px}
+.fit-result{margin-top:28px;border:1.5px solid var(--border);border-radius:18px;padding:20px 24px;background:var(--surface2);display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:24px;align-items:center;transition:border-color .25s,background .25s}
+.fit-result[data-state="strong"]{border-color:var(--ok);background:var(--ok-bg)}
+.fit-result[data-state="likely"]{border-color:var(--accent)}
+.fit-result[data-state="review"]{border-color:#c88a1a;background:var(--amber-bg)}
+.seg{display:flex;gap:6px;margin-bottom:12px;max-width:180px}
+.seg i{flex:1;height:7px;border-radius:99px;background:var(--border);transition:background .25s}
+.seg i.on{background:var(--accent)}
+.fit-result[data-state="strong"] .seg i.on{background:var(--ok)}
+.fit-result[data-state="review"] .seg i.on{background:#c88a1a}
+.fit-result h3{font-size:22px;line-height:1.2;letter-spacing:-.02em;margin:0 0 6px}
+.fit-result p{margin:0;color:var(--muted)}
+.fit-result[data-state="strong"] p,.fit-result[data-state="review"] p{color:var(--text)}
+.fr-cta .btn{width:100%}
+.fr-cta .fine{margin:10px 0 0;font-size:12px;color:var(--muted);text-align:center}
+@media (max-width:900px){
+  .fit-card{padding:22px 18px}
+  .fit-controls{grid-template-columns:1fr;gap:24px}
+  .fit-result{grid-template-columns:1fr;gap:16px;padding:18px;margin-top:24px}
+  .fit-result h3{font-size:20px}
+}
+
+/* ============ 05 REVIEWS CAROUSEL ============ */
+.rv-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:28px}
+.rv-head .sec-head{margin:0}
+.rv-rating{display:flex;align-items:center;gap:14px}
+.rv-rating b{font-size:46px;line-height:1;font-weight:800;letter-spacing:-.04em}
+.rv-rating small{display:block;font-size:14px;color:var(--muted);font-weight:600}
+.rv-rating .stars{font-size:18px;display:block}
+.car{position:relative}
+.car-track{display:flex;gap:var(--gap);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:4px 2px 8px;-webkit-overflow-scrolling:touch}
+.car-track::-webkit-scrollbar{display:none}
+.rcard{flex:0 0 calc((100% - 2 * var(--gap)) / 3);scroll-snap-align:start;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:28px;display:flex;flex-direction:column;gap:14px;min-height:230px;margin:0}
+.rcard.alt{background:var(--p800);color:#fff;border-color:var(--p800)}
+.rcard.alt .stars{color:var(--note)}
+.rcard blockquote{margin:0;font-size:18px;line-height:1.45;font-weight:600;letter-spacing:-.01em;flex:1}
+.rcard .who{font-weight:700;font-size:15px}
+.rcard .src{font-size:13px;color:var(--muted)}
+.rcard.alt .src{color:rgba(255,255,255,.7)}
+.car-ctl{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:18px}
+.dots{display:flex;gap:8px;align-items:center}
+.dots button{width:10px;height:10px;border-radius:50%;border:0;background:var(--chip-border);padding:0;cursor:pointer;transition:width .2s,background .2s;position:relative}
+.dots button::after{content:"";position:absolute;inset:-12px -4px}
+.dots button[aria-current="true"]{width:28px;border-radius:99px;background:var(--accent)}
+.car-btns{display:flex;gap:10px}
+.cbtn{width:46px;height:46px;border-radius:50%;border:1.5px solid var(--chip-border);background:var(--surface);cursor:pointer;display:grid;place-items:center;color:var(--text);transition:background .15s,border-color .15s}
+.cbtn:hover{border-color:var(--accent);background:var(--lav)}
+@media (max-width:1024px){.rcard{flex-basis:calc((100% - var(--gap)) / 2)}}
+@media (max-width:640px){
+  .rcard{flex-basis:86%;padding:24px}
+  .car-btns{display:none}
+}
+
+/* ============ 06 QUESTIONS (simple FAQ + Ask box) ============ */
+.qa{background:var(--surface2)}
+.qa-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:start}
+.qa h3.sub-title{font-size:22px;letter-spacing:-.02em;font-weight:800;margin:0 0 14px}
+.faq details{border-bottom:1.5px solid var(--border)}
+.faq summary{cursor:pointer;list-style:none;padding:18px 40px 18px 0;font-weight:700;font-size:18px;position:relative;letter-spacing:-.01em;min-height:56px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:26px;font-weight:500;color:var(--accent-ink)}
+.faq details[open] summary::after{content:"\2212"}
+.faq details p{margin:0 0 18px;color:var(--muted);max-width:60ch}
+.askbox{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:24px}
+.askbox label{display:block;font-weight:700;margin-bottom:6px;font-size:18px}
+.askbox .intro{margin:0 0 14px;color:var(--muted);font-size:15px}
+.askrow{display:flex;flex-direction:column;gap:12px}
+.askrow textarea{width:100%;min-height:96px;resize:vertical;border:1.5px solid var(--chip-border);border-radius:12px;background:var(--surface2);padding:14px 16px;font-size:16px;line-height:1.4}
+.askrow textarea:focus{border-color:var(--accent);outline:3px solid rgba(173,0,255,.25);outline-offset:0}
+.askrow .btn{width:100%}
+.askhint{margin:10px 0 0;font-size:13px;color:var(--muted)}
+.answer:not(:empty){margin-top:18px}
+.a-card{border:1.5px solid var(--border);border-radius:16px;padding:20px;background:var(--surface2);animation:rise .25s ease-out}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.a-q{font-size:14px;color:var(--muted);margin:0 0 10px;font-weight:600;overflow-wrap:anywhere}
+.a-body p{margin:0 0 12px}
+.a-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.related{margin-top:16px;padding-top:12px;border-top:1px solid var(--border);font-size:14px}
+.related b{display:block;margin-bottom:4px;color:var(--muted);font-weight:600}
+.related .linkbtn{display:block;text-align:left}
+.cmp{list-style:none;margin:0 0 14px;padding:0}
+.cmp li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);font-size:15px}
+.cmp .tag{font-weight:700;font-size:13px;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.cmp .meets{background:var(--ok-bg);color:var(--ok)}
+.cmp .below{background:var(--amber-bg);color:var(--amber)}
+@media (max-width:960px){
+  .qa-grid{grid-template-columns:1fr;gap:32px}
+  .qa-ask{order:-1}
+  .askbox{padding:20px 18px}
+}
+
+/* ============ 07 FOOTER ============ */
+.foot{position:relative;background:linear-gradient(135deg,#502566 0%,#3C1B50 50%,#642587 100%);color:rgba(255,255,255,.8);padding:0}
+.foot-curve{display:block;width:100%;height:56px;background:transparent}
+.foot-curve svg{display:block;width:100%;height:100%}
+.foot-talk{text-align:center;padding:36px 0;border-bottom:1px solid rgba(255,255,255,.16)}
+.foot-talk h3{margin:0 0 6px;font-size:28px;letter-spacing:-.02em;color:#fff}
+.foot-talk p{margin:0;font-size:17px}
+.foot-talk a.tel{color:#fff;font-weight:700;text-underline-offset:4px}
+.foot-talk .btn{margin-top:18px}
+.foot-grid{display:grid;grid-template-columns:1.3fr 1fr 1.2fr 1.2fr;gap:36px;padding:44px 0 36px}
+.foot h4{margin:0 0 14px;color:#fff;font-size:17px;font-weight:700}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.foot li a{text-decoration:none;font-size:15px;color:rgba(255,255,255,.82)}
+.foot li a:hover{color:#fff;text-decoration:underline;text-underline-offset:3px}
+.social{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.social a{width:42px;height:42px;border-radius:50%;border:1.5px solid rgba(255,255,255,.35);display:grid;place-items:center;color:#fff;transition:background .15s}
+.social a:hover{background:rgba(255,255,255,.14)}
+.legal{border-top:1px solid rgba(255,255,255,.16);padding:24px 0 36px;font-size:13px;display:grid;gap:10px;color:rgba(255,255,255,.7)}
+@media (max-width:1024px){.foot-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:640px){
+  .foot-grid{gap:30px 20px}
+  .foot-grid > :first-child{grid-column:1/-1}
+  .foot-talk h3{font-size:24px}
+}
+
+/* ============ 08 FLOATING UI (mobile CTA bar + scroll to top) ============ */
+.sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--border);padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));display:none;transform:translateY(110%);transition:transform .25s;box-shadow:0 -6px 18px rgba(0,0,0,.12)}
+.sticky-cta.show{transform:none}
+.sticky-cta .btn{width:100%;min-height:46px;padding:10px 18px}
+.to-top{position:fixed;right:16px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:35;width:48px;height:48px;border-radius:50%;border:0;background:var(--p800);color:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:0 8px 22px rgba(42,17,57,.35);opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .2s,transform .2s,bottom .25s}
+.to-top.show{opacity:1;pointer-events:auto;transform:none}
+.to-top:hover{background:var(--accent)}
+@media (max-width:960px){
+  .sticky-cta{display:block}
+  .to-top{width:44px;height:44px;right:12px}
+  body.has-bar .to-top{bottom:calc(70px + env(safe-area-inset-bottom,0px))}
+}
+</style>
 </head>
-<body class="bg-gray-100">
-    <div class="container mx-auto px-4 py-8">
-        <form id="businessLoanForm" class="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-8">
-            <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Business Loan Application</h2>
-            
-            <!-- Business Name -->
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="businessName">
-                    Business Name*
-                </label>
-                <input 
-                    type="text" 
-                    id="businessName" 
-                    autocomplete="off"
-                    list="companyNames"
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                    placeholder="Enter your business name"
-                    required
-                >
-                <datalist id="companyNames">
-                    <!-- Will be populated by JavaScript -->
-                </datalist>
-            </div>
 
-            <!-- Business Details Row -->
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="foundedYear">
-                        Founded Year
-                    </label>
-                    <input 
-                        type="number" 
-                        id="foundedYear"
-                        min="1900" 
-                        max="2024"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        placeholder="Year founded"
-                    >
-                </div>
-                
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="industry">
-                        Industry
-                    </label>
-                    <select 
-                        id="industry"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    >
-                        <option value="">Select Industry</option>
-                        <option value="Technology">Technology</option>
-                        <option value="Retail">Retail</option>
-                        <option value="Manufacturing">Manufacturing</option>
-                        <option value="Healthcare">Healthcare</option>
-                        <option value="Finance">Finance</option>
-                        <option value="Food & Beverage">Food & Beverage</option>
-                        <option value="Construction">Construction</option>
-                        <option value="Professional Services">Professional Services</option>
-                        <option value="Education">Education</option>
-                        <option value="Entertainment">Entertainment</option>
-                        <option value="E-commerce">E-commerce</option>
-                        <option value="Automotive">Automotive</option>
-                    </select>
-                </div>
-            </div>
+<body>
+<a class="skip" href="#apply">Skip to application</a>
 
-            <!-- Financial Details Row -->
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="annualRevenue">
-                        Annual Revenue ($)
-                    </label>
-                    <input 
-                        type="number" 
-                        id="annualRevenue"
-                        min="0"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        placeholder="Annual Revenue"
-                    >
-                </div>
-                
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="requestedFunding">
-                        Requested Funding ($)*
-                    </label>
-                    <input 
-                        type="number" 
-                        id="requestedFunding"
-                        min="1000"
-                        required
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        placeholder="Loan Amount"
-                    >
-                </div>
-            </div>
+<!-- ============ 01 HEADER ============ -->
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Kapitus home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 2v12M3 8l7-6M5.5 6.2 11 14" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      kapitus
+    </a>
+    <div class="header-right">
+      <a class="phone" href="tel:+16466307618" aria-label="Call a financing specialist at (646) 630-7618">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
+        <span><small>Talk to a specialist</small>(646) 630-7618</span>
+      </a>
+      <a class="btn btn-white btn-sm" href="#apply" data-cta data-loc="header" data-start="Apply now" data-continue="Continue application">Apply now</a>
+    </div>
+  </div>
+</header>
 
-            <!-- Address Details -->
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="companyAddress">
-                    Company Address
-                </label>
-                <input 
-                    type="text" 
-                    id="companyAddress"
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    placeholder="Street Address"
-                >
-            </div>
+<main id="top">
 
-            <!-- State and Country Row -->
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="state">
-                        State
-                    </label>
-                    <select 
-                        id="state"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    >
-                        <option value="">Select State</option>
-                    </select>
-                </div>
-                
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="country">
-                        Country
-                    </label>
-                    <input 
-                        type="text" 
-                        id="country"
-                        value="United States"
-                        readonly
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-200"
-                    >
-                </div>
-            </div>
-
-            <!-- Owner Contact Information -->
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="ownerName">
-                        Owner Name
-                    </label>
-                    <input 
-                        type="text" 
-                        id="ownerName"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        placeholder="Business Owner Name"
-                    >
-                </div>
-                
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
-                        Contact Email
-                    </label>
-                    <input 
-                        type="email" 
-                        id="email"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        placeholder="Email Address"
-                    >
-                </div>
-            </div>
-
-            <!-- Submit Button -->
-            <div>
-                <button 
-                    type="submit"
-                    class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline"
-                >
-                    Submit Loan Application
-                </button>
-            </div>
-        </form>
+<!-- ============ 02 HERO + APPLICATION CARD ============ -->
+<section class="hero" id="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <h1>Fast business loans with flexible terms</h1>
+      <p class="lede">Tell us about your business and see your financing options. Funding can happen in as little as 24 hours after approval.</p>
+      <div class="quals" role="group" aria-label="Typical qualifications">
+        <div class="quals-title">Typical qualifications</div>
+        <div class="qual"><strong>2+ years</strong><span>in business</span></div>
+        <div class="qual"><strong>650+</strong><span>credit score</span></div>
+        <div class="qual"><strong>$250K+</strong><span>annual revenue</span></div>
+      </div>
+      <a class="hero-link" href="#fit">Not sure you match? Check your fit in 20 seconds</a>
     </div>
 
-    <script src="script.js"></script>
+    <div id="apply">
+      <div class="card" id="card" aria-live="polite">
+        <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+        <div class="welcome" id="welcome" hidden>
+          <span id="welcomeText">Welcome back. We saved your request.</span>
+          <button type="button" class="linkbtn" id="startOver">Start over</button>
+        </div>
+
+        <!-- step 1: amount -->
+        <div id="step1">
+          <h2>How much funding do you need?</h2>
+          <p class="sub">Enter an amount to start. You can change it anytime.</p>
+          <div class="field" id="amountField">
+            <span class="cur" aria-hidden="true">$</span>
+            <input id="amount" inputmode="numeric" autocomplete="off" value="100,000" aria-label="Funding amount in US dollars" aria-describedby="amountErr">
+          </div>
+          <div class="err" id="amountErr" role="alert"></div>
+          <button type="button" class="btn btn-primary" id="start">Get started</button>
+          <p class="range-note">We provide <b>$5K to $5M</b> in financing. The amount depends on your business profile.</p>
+          <noscript><p class="range-note">Please enable JavaScript to apply here, or call <a href="tel:+16466307618">(646) 630-7618</a>.</p></noscript>
+        </div>
+
+        <!-- step 2: use of funds -->
+        <div id="step2" hidden>
+          <h2>What will this funding help with?</h2>
+          <p class="sub">Select all that apply. This helps us match you to the right options.</p>
+          <div class="chips" id="uses" role="group" aria-label="Use of funds">
+            <button type="button" class="chip" aria-pressed="false">Cash flow</button>
+            <button type="button" class="chip" aria-pressed="false">Inventory</button>
+            <button type="button" class="chip" aria-pressed="false">Payroll</button>
+            <button type="button" class="chip" aria-pressed="false">Repairs or equipment</button>
+            <button type="button" class="chip" aria-pressed="false">Expansion or new hires</button>
+            <button type="button" class="chip" aria-pressed="false">Emergency</button>
+          </div>
+          <button type="button" class="btn btn-primary" id="next2" disabled>Continue</button>
+          <button type="button" class="back" id="back2">Change amount</button>
+        </div>
+
+        <!-- step 3: hand-off to the existing application form (set KAP.cfg.applicationUrl in section 00 script) -->
+        <div id="step3" hidden>
+          <div class="tick" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+          <h2>You’re off to a great start</h2>
+          <p class="sub" id="summary"></p>
+          <p class="sub">Next, a few quick questions about your business.</p>
+          <button type="button" class="btn btn-primary" id="handoffBtn">Continue</button>
+          <p class="preview-note" id="handoffNote" hidden>Preview only: the application form opens here once it’s connected.</p>
+          <button type="button" class="back" id="back3">Change my answers</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-proof">
+      <div class="proof">
+        <div><strong>$10 billion</strong><span>in capital provided</span></div>
+        <div><strong>69,000</strong><span>businesses funded</span></div>
+        <div><strong>4.6 <span class="stars" aria-hidden="true">&#9733;</span></strong><span>on Google, 881 reviews</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 WHY KAPITUS ============ -->
+<section id="why">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="title">Experience, range and people who pick up the phone</h2>
+      <p class="lede2">What owners tell us they value most about working with Kapitus.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-media">
+        <!-- IMAGE SLOT: add an image or video poster here, for example:
+             <img src="/path/to/team.webp" alt="Kapitus financing specialists" width="800" height="600" loading="lazy">
+             Delete this comment and keep the .why-stat block below; a dark gradient keeps it readable. -->
+        <div class="why-stat">20+<small>years financing small businesses, since 2006</small></div>
+      </div>
+      <div class="why-list">
+        <div class="why-item">
+          <div class="why-ico" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 4.5-3.2 8.3-8 9-4.8-.7-8-4.5-8-9V7z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></div>
+          <div><h3>20+ years of experience</h3><p>We’ve been financing small businesses since 2006, with $10 billion provided to 69,000 businesses.</p></div>
+        </div>
+        <div class="why-item">
+          <div class="why-ico" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.6c0-1 1-1.7 2.5-1.7s2.5.7 2.5 1.7-1 1.6-2.5 1.9-2.5.8-2.5 1.9 1 1.7 2.5 1.7 2.5-.7 2.5-1.7"/></svg></div>
+          <div><h3>Funding from $5K up to $5M</h3><p>From a small cash-flow gap to a major expansion. The amount depends on your business profile.</p></div>
+        </div>
+        <div class="why-item">
+          <div class="why-ico" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg></div>
+          <div>
+            <h3>A specialist who’s in your corner</h3>
+            <p>You’re never left alone with a form. A financing specialist walks you through your options.</p>
+            <blockquote>“You truly feel like you have a teammate that cares about your business.”<cite>Kyle Flowers, Google review</cite></blockquote>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 FIT CHECK ============ -->
+<section class="fit" id="fit">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="title">See how your business lines up</h2>
+      <p class="lede2">Adjust the three inputs and the result updates as you go. No personal details needed.</p>
+    </div>
+    <div class="fit-card">
+      <div class="fit-controls">
+        <div class="ctl">
+          <div class="ctl-top"><span class="lbl" id="tLbl">Time in business</span><span class="val idle" id="tVal">Move the slider</span></div>
+          <div class="range-wrap" id="tWrap" style="--p:0">
+            <div class="range-bar"></div><div class="range-fill"></div>
+            <input type="range" id="tRange" min="0" max="4" step="1" value="0" aria-labelledby="tLbl" aria-valuetext="Not set">
+          </div>
+          <div class="ticks" aria-hidden="true"><span>6 mo</span><span>1 yr</span><span>1.5 yrs</span><span>2 yrs</span><span>2+ yrs</span></div>
+        </div>
+        <div class="ctl">
+          <div class="ctl-top"><label for="revIn">Annual revenue</label><span class="val idle" id="rVal">Enter an amount</span></div>
+          <div class="rev-field"><span class="cur" aria-hidden="true">$</span><input id="revIn" inputmode="numeric" autocomplete="off" placeholder="350,000"></div>
+          <p class="hint">An estimate is fine.</p>
+        </div>
+        <div class="ctl">
+          <div class="ctl-top"><span class="lbl" id="cLbl">Credit score</span></div>
+          <div class="cchips" id="cChips" role="group" aria-labelledby="cLbl">
+            <button type="button" class="chip" data-v="0" aria-pressed="false">Below 600</button>
+            <button type="button" class="chip" data-v="1" aria-pressed="false">600 to 649</button>
+            <button type="button" class="chip" data-v="2" aria-pressed="false">650 to 699</button>
+            <button type="button" class="chip" data-v="3" aria-pressed="false">700 or higher</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="fit-result" id="fitResult" data-state="idle" role="status" aria-live="polite">
+        <div class="fr-main">
+          <div class="seg" aria-hidden="true"><i></i><i></i><i></i></div>
+          <h3 id="fTitle">Let’s see where you stand</h3>
+          <p id="fBody">Move the slider, enter your revenue and pick a credit range.</p>
+        </div>
+        <div class="fr-cta">
+          <button type="button" class="btn btn-primary" data-cta data-loc="fit" data-start="Start my application" data-continue="Continue your application">Start my application</button>
+          <p class="fine">This isn’t an offer or a credit decision.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 REVIEWS CAROUSEL ============ -->
+<section id="reviews">
+  <div class="wrap">
+    <div class="rv-head">
+      <div class="sec-head"><h2 class="title" style="margin-bottom:0">The proof is in the ratings</h2></div>
+      <div class="rv-rating"><b>4.6</b><div><span class="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span><small>out of 5 on Google, based on 881 reviews</small></div></div>
+    </div>
+    <div class="car" id="car" role="region" aria-roledescription="carousel" aria-label="Customer reviews">
+      <div class="car-track" id="carTrack" tabindex="0"></div>
+      <div class="car-ctl">
+        <div class="dots" id="dots"></div>
+        <div class="car-btns">
+          <button type="button" class="cbtn" id="carPause" aria-pressed="false" aria-label="Pause automatic scrolling"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" id="pauseIco"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
+          <button type="button" class="cbtn" id="carPrev" aria-label="Previous reviews"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button type="button" class="cbtn" id="carNext" aria-label="Next reviews"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 QUESTIONS (FAQ + Ask box) ============ -->
+<section class="qa" id="ask">
+  <div class="wrap">
+    <div class="qa-grid">
+      <div class="qa-faq">
+        <h2 class="title">Common questions</h2>
+        <div class="faq" id="faqList"></div>
+      </div>
+      <div class="qa-ask">
+        <div class="askbox">
+          <form id="askForm" novalidate>
+            <label for="askInput">Ask your own question</label>
+            <p class="intro">Describe your situation, for example how long you’ve been in business and your revenue. Answers come only from Kapitus information.</p>
+            <div class="askrow">
+              <textarea id="askInput" rows="3" maxlength="400" placeholder="Example: I have 1.6 years in business and $400K in revenue. Can I still apply?"></textarea>
+              <button type="submit" class="btn btn-primary">Ask</button>
+            </div>
+            <p class="askhint">Please don’t include personal details such as your SSN. For anything we can’t answer here, a specialist is a call away.</p>
+          </form>
+          <div class="answer" id="answer" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ============ 07 FOOTER ============ -->
+<footer class="foot" id="fFoot">
+  <div class="foot-curve" aria-hidden="true"><svg viewBox="0 0 1000 100" preserveAspectRatio="none"><path fill="currentColor" d="M0 0h1000v1C1000 19.4 873.3 97.8 500 97 126.7 96.3 .8 19.8 0 0z" style="color:var(--surface2)"/></svg></div>
+  <div class="wrap">
+    <div class="foot-talk">
+      <h3>Have questions? Let’s talk.</h3>
+      <p>Connect with one of our financing specialists at <a class="tel" href="tel:+16466307618">(646) 630-7618</a>.</p>
+      <a class="btn btn-white" href="#apply" data-cta data-loc="footer" data-start="Get started" data-continue="Continue your application">Get started</a>
+    </div>
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="#top" style="font-size:24px">
+          <span class="brand-mark" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 2v12M3 8l7-6M5.5 6.2 11 14" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>kapitus
+        </a>
+        <p style="margin:14px 0 0;font-size:15px;max-width:30ch">Providing the best financing solutions for small businesses since 2006.</p>
+        <div class="social">
+          <a href="https://twitter.com/KapitusFinance" target="_blank" rel="noopener" aria-label="Kapitus on X"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 4l16 16M20 4L4 20"/></svg></a>
+          <a href="https://www.linkedin.com/company/kapitus/" target="_blank" rel="noopener" aria-label="Kapitus on LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="9" width="4" height="12" rx="1"/><circle cx="5" cy="5" r="2.2"/><path d="M10 9h3.6v1.7c.6-1.1 1.9-2 3.7-2 3.1 0 3.7 2 3.7 4.7V21h-4v-6.4c0-1.3-.1-2.4-1.6-2.4s-1.8 1.1-1.8 2.4V21h-4z"/></svg></a>
+          <a href="https://www.facebook.com/KapitusFinance/" target="_blank" rel="noopener" aria-label="Kapitus on Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M14 8V6.3c0-.8.2-1.3 1.4-1.3H17V2.2C16.6 2.1 15.6 2 14.5 2 12.1 2 10.5 3.4 10.5 6V8H8v3.3h2.5V22H14V11.3h2.7L17 8z"/></svg></a>
+          <a href="https://www.youtube.com/channel/UCvZ5ahnMH9jCnN0lP4rRROA" target="_blank" rel="noopener" aria-label="Kapitus on YouTube"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2C2 8.8 2 12 2 12s0 3.2.4 4.8a2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8c.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8zM10 15V9l5.2 3z"/></svg></a>
+          <a href="https://www.instagram.com/kapitus_financing/" target="_blank" rel="noopener" aria-label="Kapitus on Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>Discover</h4>
+        <ul>
+          <li><a href="https://kapitus.com/" target="_blank" rel="noopener">Home</a></li>
+          <li><a href="https://kapitus.com/the-kapitus-difference" target="_blank" rel="noopener">Kapitus Difference</a></li>
+          <li><a href="https://kapitus.com/blog" target="_blank" rel="noopener">Resource Center</a></li>
+          <li><a href="https://kapitus.com/success-stories" target="_blank" rel="noopener">Success Stories</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>About</h4>
+        <ul>
+          <li><a href="https://kapitus.com/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a></li>
+          <li><a href="https://kapitus.com/terms-of-use" target="_blank" rel="noopener">Terms of Use Agreement</a></li>
+          <li><a href="https://kapitus.com/media-center/leadership" target="_blank" rel="noopener">Leadership Team</a></li>
+          <li><a href="https://kapitus.com/careers/" target="_blank" rel="noopener">Careers</a></li>
+          <li><a href="https://kapitus.com/media-center" target="_blank" rel="noopener">Media Center</a></li>
+          <li><a href="https://kapitus.com/developer-documentation" target="_blank" rel="noopener">Kapitus Partner API</a></li>
+          <li><a href="https://kapitus.com/usa-patriot-act" target="_blank" rel="noopener">USA PATRIOT Act</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Products</h4>
+        <ul>
+          <li><a href="https://kapitus.com/products-services/business-loans/" target="_blank" rel="noopener">Business Loans</a></li>
+          <li><a href="https://kapitus.com/products-services/sba-loans/" target="_blank" rel="noopener">SBA Loans</a></li>
+          <li><a href="https://kapitus.com/products-services/line-of-credit/" target="_blank" rel="noopener">Line of Credit</a></li>
+          <li><a href="https://kapitus.com/products-services/equipment-financing/" target="_blank" rel="noopener">Equipment Financing</a></li>
+          <li><a href="https://kapitus.com/products-services/revenue-based-financing/" target="_blank" rel="noopener">Revenue Based Financing</a></li>
+          <li><a href="https://kapitus.com/products-services/invoice-factoring/" target="_blank" rel="noopener">Invoice Factoring</a></li>
+          <li><a href="https://kapitus.com/products-services/purchase-order-financing/" target="_blank" rel="noopener">Purchase Order Financing</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">
+      <div>Copyright 2026 Strategic Funding Source, Inc. All rights reserved. Kapitus and the Kapitus logo are registered trademarks of Strategic Funding Source, Inc. Loans made or brokered in California are either by Kapitus LLC, pursuant to License Number 60DBO-198798, or by Kapitus Equipment Finance LLC, pursuant to License Number 60DBO-210433.</div>
+      <div>Loans may be funded by WebBank. The specific lender will be identified in your agreement.</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ 08 FLOATING UI ============ -->
+<div class="sticky-cta" id="stickyCta"><a class="btn btn-primary" href="#apply" data-cta data-loc="sticky" data-start="Get started" data-continue="Continue your application">Get started</a></div>
+<button type="button" class="to-top" id="toTop" aria-label="Back to top" tabindex="-1"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg></button>
+
+
+<!-- =====================================================================
+     SCRIPTS: one block per section. Each block checks that its section exists,
+     so you can delete a section's HTML and its script block together.
+     ===================================================================== -->
+
+<script>
+/* ============ 00 CORE: config, state, dynamic CTA, analytics ============
+   EDIT HERE: phone numbers, amount limits, qualification thresholds, storage, hand-off URL. */
+window.KAP = (function(){
+  var cfg = {
+    phoneSales: "(646) 630-7618", phoneSalesTel: "+16466307618",
+    amountMin: 5000, amountMax: 5000000, defaultAmount: 100000,
+    typical: {years: 2, revenue: 250000, credit: 650},   /* shown as "typical qualifications" */
+    applicationUrl: "",        /* WIRE-UP: URL of the application form. Receives ?amount=&uses= */
+    resumeDays: 7,             /* how long a started request is remembered in this browser */
+    storageKey: "kap_blhp_v1",
+    analytics: true            /* pushes events to window.dataLayer (GTM) */
+  };
+  var reduce = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  function $(s,r){ return (r||document).querySelector(s); }
+  function $$(s,r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); }
+  function el(tag, cls, txt){ var n = document.createElement(tag); if(cls) n.className = cls; if(txt!=null) n.textContent = txt; return n; }
+  function digits(v){ return (v||"").replace(/[^0-9]/g,""); }
+  function fmt(n){ return n ? Number(n).toLocaleString("en-US") : ""; }
+
+  /* analytics: events are prefixed blhp_. No free text or personal data is ever sent. */
+  function track(name, data){
+    if(!cfg.analytics) return;
+    try{ (window.dataLayer = window.dataLayer || []).push(Object.assign({event:"blhp_" + name}, data || {})); }catch(e){}
+  }
+
+  /* progress state (amount, use of funds, step only; stored in this browser, never sent anywhere) */
+  var state = {started:false, step:1, amount:cfg.defaultAmount, uses:[], resumed:false};
+  function store(){ try{ return window.localStorage; }catch(e){ return null; } }
+  function load(){
+    var s = store(); if(!s) return;
+    try{
+      var raw = s.getItem(cfg.storageKey); if(!raw) return;
+      var d = JSON.parse(raw);
+      if(!d || !d.ts || Date.now() - d.ts > cfg.resumeDays * 864e5){ s.removeItem(cfg.storageKey); return; }
+      if(d.started){ state.started = true; state.step = (d.step===3 ? 3 : 2); state.amount = d.amount || cfg.defaultAmount; state.uses = Array.isArray(d.uses) ? d.uses : []; state.resumed = true; }
+    }catch(e){}
+  }
+  function save(){
+    var s = store(); if(!s) return;
+    try{ s.setItem(cfg.storageKey, JSON.stringify({started:state.started, step:state.step, amount:state.amount, uses:state.uses, ts:Date.now()})); }catch(e){}
+  }
+  function clear(){ var s = store(); try{ s && s.removeItem(cfg.storageKey); }catch(e){} state.started=false; state.step=1; state.uses=[]; state.resumed=false; refreshCta(); }
+  function set(patch){ Object.keys(patch).forEach(function(k){ state[k] = patch[k]; }); if(state.started) save(); refreshCta(); }
+
+  /* dynamic CTA: every [data-cta] switches to "continue" once the visitor has started */
+  function refreshCta(){
+    $$("[data-cta]").forEach(function(a){ a.textContent = state.started ? a.dataset["continue"] : a.dataset.start; });
+  }
+  function goToCard(){
+    var card = $("#card"); if(!card) return;
+    card.scrollIntoView({behavior: reduce ? "auto" : "smooth", block:"center"});
+    setTimeout(function(){
+      var t = (!$("#step1").hidden) ? $("#amount") : ($("#step2").hidden ? $("#handoffBtn") : $("#uses .chip"));
+      if(t){ try{ t.focus({preventScroll:true}); }catch(e){} }
+    }, reduce ? 0 : 450);
+  }
+  document.addEventListener("click", function(e){
+    var a = e.target.closest ? e.target.closest("[data-cta]") : null;
+    if(!a) return;
+    e.preventDefault();
+    track("cta_click", {location:a.dataset.loc || "", mode: state.started ? "continue" : "start"});
+    goToCard();
+  });
+
+  load();
+  refreshCta();
+  document.addEventListener("DOMContentLoaded", refreshCta);
+  return {cfg:cfg, state:state, $:$, $$:$$, el:el, digits:digits, fmt:fmt, track:track, set:set, clear:clear, save:save, refreshCta:refreshCta, goToCard:goToCard, reduce:reduce};
+})();
+</script>
+
+<script>
+/* ============ 02 HERO: application card (amount, use of funds, hand-off, resume) ============ */
+(function(){
+  var K = window.KAP, $ = K.$, $$ = K.$$;
+  if(!$("#card")) return;
+  var cfg = K.cfg, st = K.state;
+  var amount=$("#amount"), field=$("#amountField"), err=$("#amountErr"), bar=$("#bar");
+  var steps = {1:$("#step1"), 2:$("#step2"), 3:$("#step3")};
+  var uses = $$("#uses .chip"), next2=$("#next2"), welcome=$("#welcome");
+  var view = st.started ? st.step : 1;
+
+  function usesChosen(){ return uses.filter(function(x){return x.getAttribute("aria-pressed")==="true"}).map(function(x){return x.textContent}); }
+  function summaryText(){ var u = st.uses.map(function(x){return x.toLowerCase()}); return "$" + K.fmt(st.amount) + (u.length ? " for " + u.join(", ") + "." : "."); }
+  function render(){
+    [1,2,3].forEach(function(n){ steps[n].hidden = (n!==view); });
+    bar.style.width = ({1:6,2:14,3:22})[view] + "%";
+    $("#start").textContent = st.started ? "Continue your application" : "Get started";
+    var showWelcome = st.resumed && view>1;
+    welcome.hidden = !showWelcome;
+    if(showWelcome){ $("#welcomeText").textContent = "Welcome back. We saved your $" + K.fmt(st.amount) + " request."; }
+    if(view===3){ $("#summary").textContent = summaryText(); }
+    next2.disabled = usesChosen().length === 0;
+  }
+  /* restore saved selections */
+  amount.value = K.fmt(st.amount);
+  uses.forEach(function(c){ c.setAttribute("aria-pressed", String(st.uses.indexOf(c.textContent) > -1)); });
+
+  amount.addEventListener("input", function(){
+    amount.value = K.fmt(K.digits(amount.value));
+    field.dataset.invalid = "false"; err.textContent = "";
+  });
+  amount.addEventListener("focus", function(){ setTimeout(function(){ amount.select(); }, 0); });
+  amount.addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); $("#start").click(); } });
+
+  $("#start").addEventListener("click", function(){
+    var n = Number(K.digits(amount.value));
+    if(!n || n < cfg.amountMin || n > cfg.amountMax){
+      field.dataset.invalid = "true";
+      err.textContent = "Enter an amount between $" + K.fmt(cfg.amountMin) + " and $" + K.fmt(cfg.amountMax) + ".";
+      amount.focus(); return;
+    }
+    view = 2; K.set({started:true, step:2, amount:n});
+    K.track("amount_submit", {amount:n});
+    render();
+  });
+  uses.forEach(function(c){
+    c.addEventListener("click", function(){
+      c.setAttribute("aria-pressed", String(c.getAttribute("aria-pressed")!=="true"));
+      K.set({uses: usesChosen()}); next2.disabled = usesChosen().length===0;
+    });
+  });
+  $("#back2").addEventListener("click", function(){ view = 1; render(); amount.focus(); });
+  next2.addEventListener("click", function(){
+    view = 3; K.set({step:3, uses:usesChosen()});
+    K.track("uses_continue", {count: st.uses.length});
+    render();
+  });
+  $("#back3").addEventListener("click", function(){ view = 2; K.set({step:2}); render(); });
+  $("#handoffBtn").addEventListener("click", function(){
+    K.track("handoff", {amount: st.amount, uses_count: st.uses.length});
+    if(cfg.applicationUrl){
+      var sep = cfg.applicationUrl.indexOf("?") > -1 ? "&" : "?";
+      window.location.href = cfg.applicationUrl + sep + "amount=" + encodeURIComponent(st.amount) + "&uses=" + encodeURIComponent(st.uses.join(","));
+    } else { $("#handoffNote").hidden = false; }
+  });
+  $("#startOver").addEventListener("click", function(){
+    K.clear(); uses.forEach(function(c){ c.setAttribute("aria-pressed","false"); });
+    amount.value = K.fmt(cfg.defaultAmount); view = 1; render(); amount.focus();
+  });
+  render();
+})();
+</script>
+
+<script>
+/* ============ 04 FIT CHECK: slider + revenue + credit chips, live result ============
+   EDIT HERE: the rules in verdict() and the messages. Thresholds are placeholders until the client confirms them. */
+(function(){
+  var K = window.KAP, $ = K.$, $$ = K.$$;
+  var res = $("#fitResult"); if(!res) return;
+  var TIME = [
+    {label:"6 months",  key:"lt1"},
+    {label:"1 year",    key:"1to2"},
+    {label:"1.5 years", key:"1to2"},
+    {label:"2 years",   key:"2plus"},
+    {label:"2+ years",  key:"2plus"}
+  ];
+  var fit = {t:null, rev:null, c:null}, lastState = null;
+  var tRange=$("#tRange"), tWrap=$("#tWrap"), tVal=$("#tVal"), revIn=$("#revIn"), rVal=$("#rVal"), cChips=$$("#cChips .chip");
+  var segs=$$(".seg i", res), fTitle=$("#fTitle"), fBody=$("#fBody");
+
+  function revBand(n){ return n<100000?0 : n<250000?1 : n<500000?2 : n<1000000?3 : 4; }
+  function setRes(state, title, body){ res.dataset.state = state; fTitle.textContent = title; fBody.textContent = body; }
+
+  /* rules for the full read (time key, revenue band 0-4, credit band 0-3) */
+  function verdict(t, r, c){
+    if(t==="2plus" && r>=2 && c>=2) return ["strong","You look like a strong fit","Your time in business, revenue and credit line up well with what we typically look for. Start your application whenever you’re ready."];
+    var why = null;
+    if(t!=="2plus" && r>=3 && c>=2) why = "Newer businesses with strong revenue and solid credit are often a good fit. Your revenue carries a lot of weight here.";
+    else if(t==="2plus" && r>=2 && c===1) why = "Steady revenue and years in business count for a lot, even when your credit score is a little below our typical range.";
+    else if(t==="1to2" && r>=2 && c>=3) why = "Strong credit and healthy revenue can offset a shorter time in business.";
+    if(why) return ["likely","You may still be a great fit", why + " A specialist will review your application individually."];
+    return ["review","Let’s take a closer look","A few details fall outside our typical range, but you can still apply. A specialist will walk through what may be possible and what to work toward."];
+  }
+  /* encouragement while only some inputs are filled */
+  function partial(hasT, hasR, hasC, t, r, c){
+    var body = "Keep going. Your next answer fills in the picture.";
+    if(hasT && !hasR && !hasC){
+      body = t==="2plus" ? "Two or more years in business is a strong start." : (t==="1to2" ? "Under 2 years can still work. Your next answers matter." : "Newer businesses can still apply. Revenue tells us a lot.");
+    } else if(hasT && hasR && !hasC){
+      if(t!=="2plus" && r>=3) body = "Strong revenue carries real weight for a newer business.";
+      else if(t==="2plus" && r>=2) body = "Steady revenue and time in business is a solid combination.";
+      else if(r>=2) body = "Healthy revenue helps balance a shorter time in business.";
+      else body = "Revenue is under our typical range, so your credit range matters.";
+    } else if(!hasT && hasR && !hasC){
+      body = r>=2 ? "Your revenue is in a strong range. Tell us how long you’ve been in business." : "Revenue is under our typical range. Your other answers matter.";
+    } else if(!hasT && !hasR && hasC){
+      body = c>=2 ? "Your credit score is in our typical range." : "Credit is under our typical range. Your other answers matter.";
+    } else if(hasT && !hasR && hasC){
+      body = "Add your revenue to complete the picture.";
+    } else if(!hasT && hasR && hasC){
+      body = "One more: move the slider to show how long you’ve been in business.";
+    }
+    return ["idle","Keep going",body];
+  }
+  function update(){
+    var hasT = fit.t!==null, hasR = fit.rev!==null && fit.rev>0, hasC = fit.c!==null;
+    var n = (hasT?1:0) + (hasR?1:0) + (hasC?1:0);
+    segs.forEach(function(s,i){ s.classList.toggle("on", i<n); });
+    if(n===0){ setRes("idle","Let’s see where you stand","Move the slider, enter your revenue and pick a credit range."); return; }
+    var t = hasT ? TIME[fit.t].key : null, r = hasR ? revBand(fit.rev) : null, c = hasC ? fit.c : null;
+    var out = (n===3) ? verdict(t,r,c) : partial(hasT,hasR,hasC,t,r,c);
+    setRes(out[0], out[1], out[2]);
+    if(n===3 && out[0]!==lastState){ lastState = out[0]; K.track("fit_result", {state:out[0]}); }
+  }
+  function setT(i){
+    fit.t = i; tRange.value = i; tWrap.style.setProperty("--p", String(i/4));
+    tVal.textContent = TIME[i].label; tVal.classList.remove("idle"); tRange.setAttribute("aria-valuetext", TIME[i].label);
+  }
+  tRange.addEventListener("input", function(){ setT(Number(tRange.value)); update(); });
+  tRange.addEventListener("change", function(){ K.track("fit_time", {value:TIME[Number(tRange.value)].label}); });
+  revIn.addEventListener("input", function(){
+    revIn.value = K.fmt(K.digits(revIn.value));
+    var n = Number(K.digits(revIn.value));
+    fit.rev = n>0 ? n : null;
+    if(n>0){ rVal.textContent = "$" + revIn.value; rVal.classList.remove("idle"); }
+    else { rVal.textContent = "Enter an amount"; rVal.classList.add("idle"); }
+    update();
+  });
+  revIn.addEventListener("change", function(){ if(fit.rev) K.track("fit_revenue", {band:revBand(fit.rev)}); });
+  cChips.forEach(function(b){
+    b.addEventListener("click", function(){
+      var on = b.getAttribute("aria-pressed")==="true";
+      cChips.forEach(function(x){ x.setAttribute("aria-pressed","false"); });
+      if(on){ fit.c = null; } else { b.setAttribute("aria-pressed","true"); fit.c = Number(b.dataset.v); K.track("fit_credit", {band:fit.c}); }
+      update();
+    });
+  });
+  tWrap.style.setProperty("--p","0");
+  update();
+})();
+</script>
+
+<script>
+/* ============ 05 REVIEWS: carousel (autoplay pauses on hover, focus, touch and with the pause button) ============
+   EDIT HERE: the REVIEWS list. alt:true gives a card the dark purple style. */
+(function(){
+  var K = window.KAP, $ = K.$, $$ = K.$$, el = K.el;
+  var track = $("#carTrack"); if(!track) return;
+  var REVIEWS = [
+    {t:"Very quick and painless procedure to obtain working capital loan for the third time! Efficient and friendly!", n:"Karen C.", s:"Kapitus customer", alt:true},
+    {t:"Nick and the Kapitus team got me funded quickly and had a great streamlined process.", n:"Matthew", s:"Google review"},
+    {t:"As good as it gets! You truly feel like you have a teammate that cares about your business.", n:"Kyle Flowers", s:"Google review"},
+    {t:"Kind, supportive and easy to work with.", n:"Dawn Lepore", s:"Google review", alt:true},
+    {t:"Great Company, Great People!", n:"Sean Lowery", s:"Google review"},
+    {t:"Excellent service! great platform and customer services 5 stars", n:"Joan Efres Nazario", s:"Google review"}
+  ];
+  var dotsEl = $("#dots"), pauseBtn = $("#carPause"), carEl = $("#car"), reduce = K.reduce;
+  REVIEWS.forEach(function(r,i){
+    var c = el("figure","rcard" + (r.alt?" alt":""));
+    c.setAttribute("role","group"); c.setAttribute("aria-label",(i+1)+" of "+REVIEWS.length);
+    var st = el("div","stars","\u2605\u2605\u2605\u2605\u2605"); st.setAttribute("aria-label","5 stars");
+    var w = el("div"); w.appendChild(el("div","who",r.n)); w.appendChild(el("div","src",r.s));
+    c.appendChild(st); c.appendChild(el("blockquote",null,r.t)); c.appendChild(w); track.appendChild(c);
+    var d = el("button"); d.type = "button"; d.setAttribute("aria-label","Go to review "+(i+1));
+    d.addEventListener("click", function(){ go(i); hold(); });
+    dotsEl.appendChild(d);
+  });
+  function gapPx(){ var cs = getComputedStyle(track); return parseFloat(cs.columnGap || cs.gap) || 20; }
+  function stepPx(){ return track.children[0].getBoundingClientRect().width + gapPx(); }
+  function maxScroll(){ return track.scrollWidth - track.clientWidth; }
+  function curIdx(){ return Math.min(REVIEWS.length-1, Math.round(track.scrollLeft / stepPx())); }
+  function go(i){
+    i = Math.max(0, Math.min(REVIEWS.length-1, i));
+    track.scrollTo({left: Math.min(i*stepPx(), maxScroll()), behavior: reduce ? "auto" : "smooth"});
+  }
+  function next(){ if(track.scrollLeft >= maxScroll()-4){ go(0); } else { go(curIdx()+1); } }
+  function prev(){ if(track.scrollLeft <= 4){ track.scrollTo({left:maxScroll(), behavior: reduce?"auto":"smooth"}); } else { go(curIdx()-1); } }
+  function paintDots(){
+    var i = (track.scrollLeft >= maxScroll()-4) ? REVIEWS.length-1 : curIdx();
+    $$("button", dotsEl).forEach(function(d,k){ d.setAttribute("aria-current", String(k===i)); });
+  }
+  var raf = 0;
+  track.addEventListener("scroll", function(){ cancelAnimationFrame(raf); raf = requestAnimationFrame(paintDots); }, {passive:true});
+  $("#carNext").addEventListener("click", function(){ next(); hold(); K.track("review_nav",{dir:"next"}); });
+  $("#carPrev").addEventListener("click", function(){ prev(); hold(); K.track("review_nav",{dir:"prev"}); });
+  track.addEventListener("keydown", function(e){ if(e.key==="ArrowRight"){ next(); e.preventDefault(); } if(e.key==="ArrowLeft"){ prev(); e.preventDefault(); } });
+
+  var timer=null, hover=false, focused=false, held=false, userPaused=false, visible=false, holdT=null;
+  function stop(){ if(timer){ clearInterval(timer); timer=null; } }
+  function sync(){ stop(); if(reduce || userPaused || hover || focused || held || !visible || document.hidden) return; timer = setInterval(next, 3800); }
+  function hold(){ held = true; sync(); clearTimeout(holdT); holdT = setTimeout(function(){ held=false; sync(); }, 8000); }
+  carEl.addEventListener("mouseenter", function(){ hover=true; sync(); });
+  carEl.addEventListener("mouseleave", function(){ hover=false; sync(); });
+  carEl.addEventListener("focusin", function(){ focused=true; sync(); });
+  carEl.addEventListener("focusout", function(){ focused=false; sync(); });
+  track.addEventListener("touchstart", function(){ held=true; sync(); clearTimeout(holdT); }, {passive:true});
+  track.addEventListener("touchend", function(){ clearTimeout(holdT); holdT = setTimeout(function(){ held=false; sync(); }, 6000); }, {passive:true});
+  document.addEventListener("visibilitychange", sync);
+  pauseBtn.addEventListener("click", function(){
+    userPaused = !userPaused;
+    pauseBtn.setAttribute("aria-pressed", String(userPaused));
+    pauseBtn.setAttribute("aria-label", userPaused ? "Resume automatic scrolling" : "Pause automatic scrolling");
+    $("#pauseIco").innerHTML = userPaused ? '<path d="M7 5l12 7-12 7z"/>' : '<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>';
+    sync();
+  });
+  if("IntersectionObserver" in window){
+    new IntersectionObserver(function(en){ visible = en[0].isIntersecting; sync(); },{threshold:0.35}).observe(carEl);
+  } else { visible = true; sync(); }
+  if(reduce){ pauseBtn.hidden = true; }
+  paintDots();
+})();
+</script>
+
+<script>
+/* ============ 06 QUESTIONS: knowledge base, FAQ list and Ask box ============
+   EDIT HERE: the KB array. Every answer must come from Kapitus pages or the application.
+   faq:true  = shown in the FAQ list.
+   check:true = needs Kapitus / compliance confirmation before launch (not shown to visitors). */
+var KB = [
+ {id:"qualify", faq:true, q:"What do I need to qualify?",
+  a:["Our typical qualifications are 2+ years in business, a 650+ credit score and $250K+ in annual revenue.","A financing specialist can tell you where you stand."],
+  src:"Kapitus landing page", kw:"qualify qualification requirement eligible eligibility need minimum criteria", rx:/(what (do|does) i need|qualif|eligib|requirement|criteria)/},
+ {id:"credit", check:true, q:"What credit score do I need?",
+  a:["The typical qualification is a 650+ credit score. Kapitus’s published minimum for small business loans is 625.","A specialist can confirm what applies to your situation."],
+  src:"Kapitus.com FAQ (conflicts with the 650+ on the landing page)", kw:"credit score fico minimum", rx:/(credit score|fico|minimum score|bad credit|low credit)/, not:/(affect|hurt|impact|ding|pull|inquir|check)/},
+ {id:"time", q:"How long do I need to be in business?",
+  a:["Two or more years in business is typical.","It’s one of three typical qualifications, along with credit score and revenue. If you have less, a specialist is the best person to tell you how your overall picture looks."],
+  src:"Kapitus landing page", kw:"business years year long time established startup new", rx:/(how long.*(business|operat)|time in business|years in business|new business|start-?up)/},
+ {id:"revenue", q:"How much revenue do I need?",
+  a:["$250K+ in annual revenue is typical. In the application you’ll choose your annual revenue range."],
+  src:"Kapitus landing page", kw:"revenue sales income annual minimum", rx:/(how much revenue|minimum revenue|annual revenue|sales)/},
+ {id:"coowner", q:"What if I own less than 50% of the business?",
+  a:["If your ownership is under 50%, we’ll ask for co-owner details to assess eligibility."],
+  src:"Kapitus application", kw:"own ownership percent partner coowner co-owner partners owners", rx:/(\bown(ership)?\b|\bpartners?\b|co-?owner|percent|%)/},
+ {id:"amount", check:true, q:"How much funding can I get?",
+  a:["We provide $5K to $5M in financing. The amount you’re offered depends on your business profile, so not every business qualifies for the full range."],
+  src:"Kapitus application and business loans page (another Kapitus page says as low as $10,000)", kw:"amount much funding borrow maximum max loan largest biggest smallest", rx:/(how much (can|could|will).*(get|borrow|fund|loan|approv)|maximum|max loan|loan amount|borrow)/},
+ {id:"speed", faq:true, q:"How fast can I get funded?",
+  a:["Some decisions come in as little as 4 hours, and funding can happen in as little as 24 hours after approval.","Timing depends on how quickly we receive your full application package."],
+  src:"Kapitus site", kw:"fast quick speed days hours funded funding approval decision time when", rx:/(how (fast|quick|soon)|how long.*(fund|approv|get (the )?money)|decision|turnaround|same day|24 hours)/},
+ {id:"terms", q:"What are the repayment terms?",
+  a:["Business loan terms run from 6 to 24 months, with daily, weekly or monthly payment options."],
+  src:"Kapitus business loans page", kw:"term terms repayment repay payment payments monthly weekly daily months", rx:/(repay|payment (options|schedule|terms|frequency)|(daily|weekly|monthly) payments?|\bterms?\b|how long (to|do i) pay)/, not:/(terms (of|and)|conditions)/},
+ {id:"use", q:"What can I use the funds for?",
+  a:["There’s no limit on how you use business loan funds: payroll, inventory, equipment, expansion, repairs and more."],
+  src:"Kapitus.com FAQ", kw:"use funds spend payroll inventory equipment expansion purpose allowed", rx:/(use (the )?(funds|money|loan)|spend|allowed to|what can i (use|spend))/},
+ {id:"offers", q:"Do I get more than one offer?",
+  a:["Yes. One application lets you apply for multiple offers."],
+  src:"Kapitus.com", kw:"offer offers multiple compare options several", rx:/((multiple|more than one|several|compare).*(offer|option)|(how many|any) offers?)/},
+ {id:"products", q:"What other financing do you offer?",
+  a:["Business loans, SBA loans, lines of credit, equipment financing, Helix healthcare financing, revenue-based financing, invoice factoring and purchase order financing.","SBA loans, lines of credit, invoice factoring and purchase order financing are offered through members of Kapitus’s financing network, not by Kapitus directly."],
+  src:"Kapitus site", kw:"product products sba line credit equipment factoring invoice purchase order revenue-based healthcare other types", rx:/(sba|line of credit|equipment|factoring|invoice|purchase order|other (products|types|financing))/},
+ {id:"howlong", check:true, q:"How long does the application take?",
+  a:["About 5 minutes. You answer one question at a time and can go back at any step."],
+  src:"Estimate: confirm with Kapitus", kw:"application minutes take apply long process steps", rx:/(how long.*(appl|take)|how many (steps|questions)|minutes)/},
+ {id:"docs", faq:true, q:"Which documents do I need?",
+  a:["Your 3 most recent, complete business bank statements. If your business is in California or New York, you’ll upload 4."],
+  src:"Kapitus application", kw:"document documents bank statement statements upload paperwork papers need", rx:/(document|bank statement|statements|paperwork|upload)/},
+ {id:"later", check:true, q:"Can I apply without my bank statements handy?",
+  a:["Yes. You can submit your application first, and we’ll email you a secure link to upload your statements later."],
+  src:"Proposed feature: confirm before launch", kw:"later handy statements skip without proceed submit email link", rx:/(don.?t have.*(statement|document)|without.*(statement|document)|upload.*later|later)/},
+ {id:"ssn", q:"Is my Social Security number safe?",
+  a:["Your SSN is encrypted and securely protected."],
+  src:"Kapitus application", kw:"ssn social security number safe secure privacy protected encrypted", rx:/(ssn|social security|secure|safe|privacy|encrypt)/},
+ {id:"creditpull", faq:true, q:"Will applying affect my credit score?",
+  a:["Kapitus’s request for your credit report doesn’t affect your personal credit score.","If your application is shared with other lenders, they may run their own checks, which can include hard credit pulls. This is explained in the application terms."],
+  src:"Kapitus application terms", kw:"credit pull inquiry hard soft affect hurt impact check report", rx:/(hard (pull|inquiry|check)|soft (pull|inquiry|check)|(affect|hurt|impact|ding).*credit|credit (check|pull|inquiry))/},
+ {id:"price", faq:true, q:"What will it cost?",
+  a:["Our loans don’t technically carry an interest rate. We charge one fixed price that doesn’t change.","Pricing depends on your credit score, revenue, industry and the loan term you choose. A specialist will walk you through the numbers."],
+  src:"Kapitus.com FAQ", kw:"cost price rate interest apr fee fees expensive pricing percent", rx:/(interest|apr|\brates?\b|cost|fees?\b|price|pricing|expensive|how much (does|will) it)/},
+ {id:"person", faq:true, q:"Can I talk to a person?",
+  a:["Yes. Financing specialists are at (646) 630-7618. Customer service is at (800) 780-7133."],
+  src:"Kapitus site", kw:"talk speak call person human phone specialist representative contact agent help", rx:/(talk|speak|call|phone|human|person|representative|specialist|contact)/},
+ {id:"about", q:"How long has Kapitus been around?",
+  a:["Kapitus has been financing small businesses since 2006. We’ve provided $10 billion in capital to 69,000 businesses and hold a 4.6 rating on Google from 881 reviews."],
+  src:"Kapitus landing page", kw:"kapitus legit trust reputable founded since experience company about reviews", rx:/(legit|trust|reputable|scam|since|founded|experience|how old|reviews)/}
+];
+</script>
+
+<script>
+/* ============ 06 QUESTIONS: Ask engine (retrieves only from KB; never invents an answer) ============ */
+(function(){
+  var K = window.KAP, $ = K.$, el = K.el, cfg = K.cfg;
+  if(!$("#askForm")) return;
+  var T = cfg.typical;
+  var STOP = new Set("the and for you your can are but not with have has had this that from what when how will would could should about any get got does did its into our out all one who why where than then them they there their been being was were just only also very more most some such like want need".split(" "));
+  function stem(w){ return w.length>4 && /s$/.test(w) && !/ss$/.test(w) ? w.slice(0,-1) : w; }
+  function tokens(s){ return String(s).toLowerCase().replace(/[^a-z0-9\s-]/g," ").split(/\s+/).filter(function(w){return w.length>2 && !STOP.has(w)}).map(stem); }
+  KB.forEach(function(e){ e.kwSet = new Set(tokens(e.kw)); });
+  function retrieve(q){
+    var tk = tokens(q), low = q.toLowerCase();
+    return KB.map(function(e){
+      var s = 0; tk.forEach(function(t){ if(e.kwSet.has(t)) s += 2; });
+      if(e.rx && e.rx.test(low)) s += 4;
+      if(e.not && e.not.test(low)) s -= 6;
+      return {e:e, s:s};
+    }).sort(function(a,b){return b.s-a.s});
+  }
+
+  /* reads numbers people type about their own business: years, months, revenue (annual or monthly), credit score */
+  var WORDNUM = {one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10};
+  function parseProfile(raw){
+    var text = " " + raw.toLowerCase().replace(/\bone and a half\b/g,"1.5").replace(/\ba year and a half\b/g,"1.5") + " ";
+    text = text.replace(/\b(one|two|three|four|five|six|seven|eight|nine|ten)\s+(years?|yrs?|months?)\b/g,function(m,w,u){return WORDNUM[w]+" "+u});
+    text = text.replace(/\b(for|in business|about|almost|over|nearly)\s+a\s+year\b/g,function(m,w){return w+" 1 year"});
+    var out = {}, m;
+    if((m = text.match(/(?:credit|fico|score)[^0-9]{0,25}(\d{3})\b/)) || (m = text.match(/\b(\d{3})\s*(?:credit|fico|score)/))){
+      var c = parseInt(m[1],10);
+      if(c>=300 && c<=850){ out.credit = c; text = text.replace(m[0]," "); }
+    }
+    if((m = text.match(/(\d+(?:\.\d+)?)\s*(?:years?|yrs?)\b/))){
+      out.years = parseFloat(m[1]); out.yearsLabel = m[1] + (parseFloat(m[1])===1 ? " year" : " years");
+      text = text.replace(m[0]," ");
+      var mm = text.match(/(\d+)\s*months?\b/);
+      if(mm){ out.years += parseInt(mm[1],10)/12; text = text.replace(mm[0]," "); }
+    } else if((m = text.match(/(\d+)\s*months?\b/))){
+      var mo = parseInt(m[1],10);
+      out.years = mo/12; out.yearsLabel = mo + (mo===1 ? " month" : " months");
+      text = text.replace(m[0]," ");
+    } else if(/(less than|under|not even|just under)\s+(a\s+|1\s+)?year|just started|recently started|brand new/.test(text)){
+      out.years = 0.5; out.yearsLabel = "under 1 year";
+    }
+    var re = /(\$)?\s?(\d{1,3}(?:,\d{3})+|\d+(?:\.\d+)?)\s*(k|m|mm|thousand|million)?\b/g, cand;
+    var revRx = /(revenue|sales|income|earn\w*|making|make|turnover|gross|annual|per year|a year)/g;
+    var amtRx = /(need|loan|fund\w*|borrow\w*|looking for|amount|request\w*)/g;
+    function last(rx, str){ var m2, pos = -1; rx.lastIndex = 0; while((m2 = rx.exec(str))){ pos = m2.index; } return pos; }
+    function first(rx, str){ rx.lastIndex = 0; var m3 = rx.exec(str); return m3 ? m3.index : -1; }
+    while((cand = re.exec(text))){
+      var val = parseFloat(cand[2].replace(/,/g,"")), suf = cand[3];
+      if(suf==="k"||suf==="thousand") val*=1e3; else if(suf==="m"||suf==="mm"||suf==="million") val*=1e6;
+      if(!(cand[1] || suf || val>=10000)) continue;
+      var end = cand.index + cand[0].length;
+      var before = text.slice(Math.max(0,cand.index-30), cand.index), after = text.slice(end, end+20);
+      var rb = last(revRx, before), ab = last(amtRx, before), label = null;
+      if(rb>=0 || ab>=0){ label = rb > ab ? "rev" : "amt"; }
+      else { var ra = first(revRx, after), aa = first(amtRx, after); if(ra>=0 && (aa<0 || ra<aa)) label = "rev"; else if(aa>=0) label = "amt"; }
+      if(label==="rev" && out.revenue==null){
+        var monthly = /(per month|a month|monthly|\/mo\b|each month|every month)/.test(after + " " + before.slice(-12));
+        out.revenue = monthly ? val*12 : val; out.monthly = monthly;
+      } else if(label==="amt" && out.amount==null){ out.amount = val; }
+      else if(label===null && out.revenue==null){ out.revenue = val; }
+    }
+    return out;
+  }
+  function money(n){ if(n>=1e6) return "$" + (Math.round(n/1e5)/10) + "M"; if(n>=1e3) return "$" + Math.round(n/1e3) + "K"; return "$" + Math.round(n); }
+  function profileAnswer(p){
+    var rows = [], short = [];
+    if(p.years!=null){ var ok = p.years >= T.years; rows.push({label:"Time in business", val:p.yearsLabel, typical:T.years+"+ years", ok:ok}); if(!ok) short.push("time in business"); }
+    if(p.revenue!=null){ var ok2 = p.revenue >= T.revenue; rows.push({label:"Annual revenue", val:money(p.revenue) + (p.monthly ? " (from monthly)" : ""), typical:"$"+Math.round(T.revenue/1000)+"K+", ok:ok2}); if(!ok2) short.push("annual revenue"); }
+    if(p.credit!=null){ var ok3 = p.credit >= T.credit; rows.push({label:"Credit score", val:String(p.credit), typical:T.credit+"+", ok:ok3}); if(!ok3) short.push("credit score"); }
+    var paras = [];
+    paras.push(short.length===0
+      ? "On the points you shared, you line up with our typical qualifications. Start an application and a specialist will take it from there."
+      : "You’re under the typical range on " + short.join(" and ") + ". Typical qualifications aren’t the whole picture, so a specialist is the right person to look at your full profile, and you can apply to find out where you stand.");
+    var missing = [];
+    if(p.years==null) missing.push("time in business");
+    if(p.revenue==null) missing.push("annual revenue");
+    if(p.credit==null) missing.push("credit score");
+    if(missing.length) paras.push("Add your " + missing.join(" and ") + " and I’ll compare those too.");
+    if(p.credit!=null && p.credit>=625 && p.credit<T.credit) paras.push("Kapitus’s published minimum credit score for small business loans is 625.");
+    return {rows:rows, paras:paras};
+  }
+
+  var answerEl = $("#answer"), input = $("#askInput");
+  function actions(parent){
+    var row = el("div","a-actions");
+    var go = el("a","btn btn-primary btn-sm"); go.href = "#apply";
+    go.setAttribute("data-cta",""); go.dataset.loc = "ask"; go.dataset.start = "Start my application"; go.dataset["continue"] = "Continue your application";
+    go.textContent = K.state.started ? go.dataset["continue"] : go.dataset.start;
+    var call = el("a","btn btn-ghost btn-sm","Call a specialist: " + cfg.phoneSales); call.href = "tel:" + cfg.phoneSalesTel;
+    row.appendChild(go); row.appendChild(call); parent.appendChild(row);
+  }
+  function render(q){
+    var card = el("div","a-card");
+    card.appendChild(el("p","a-q","You asked: " + q));
+    var body = el("div","a-body");
+    var prof = parseProfile(q), hasProfile = prof.years!=null || prof.revenue!=null || prof.credit!=null;
+    var ranked = retrieve(q), matched = "none";
+    if(hasProfile){
+      matched = "profile";
+      var pa = profileAnswer(prof);
+      body.appendChild(el("p",null,"Here’s how what you shared compares with our typical qualifications:"));
+      var ul = el("ul","cmp");
+      pa.rows.forEach(function(r){
+        var li = el("li"); li.appendChild(el("span",null, r.label + ": " + r.val + " (typical " + r.typical + ")"));
+        li.appendChild(el("span","tag " + (r.ok?"meets":"below"), r.ok ? "Meets typical" : "Below typical"));
+        ul.appendChild(li);
+      });
+      body.appendChild(ul);
+      pa.paras.forEach(function(t){ body.appendChild(el("p",null,t)); });
+      card.appendChild(body); actions(card);
+    } else if(ranked[0].s >= 3){
+      matched = ranked[0].e.id;
+      ranked[0].e.a.forEach(function(t){ body.appendChild(el("p",null,t)); });
+      card.appendChild(body);
+      if(["person","qualify","credit","time"].indexOf(matched)>-1) actions(card);
+    } else {
+      body.appendChild(el("p",null,"I don’t have an answer to that in the Kapitus information I can use, and I won’t guess."));
+      body.appendChild(el("p",null,"A financing specialist can help at " + cfg.phoneSales + ", or try rephrasing your question."));
+      card.appendChild(body); actions(card);
+    }
+    var rel = (hasProfile || ranked[0].s>=3) ? ranked.filter(function(x,i){ return x.s>=2 && (hasProfile || i>0); }).slice(0,2) : [];
+    if(rel.length){
+      var rb = el("div","related"); rb.appendChild(el("b",null,"You might also ask"));
+      rel.forEach(function(x){
+        var b = el("button","linkbtn",x.e.q); b.type = "button";
+        b.addEventListener("click", function(){ input.value = x.e.q; submit(x.e.q); });
+        rb.appendChild(b);
+      });
+      card.appendChild(rb);
+    }
+    answerEl.innerHTML = ""; answerEl.appendChild(card);
+    K.track("ask_submit", {matched:matched});   /* only the matched topic id is sent, never the typed text */
+  }
+  function submit(q){
+    q = (q||"").trim();
+    if(!q){ input.focus(); return; }
+    render(q);
+    answerEl.scrollIntoView({behavior: K.reduce ? "auto" : "smooth", block:"nearest"});
+  }
+  $("#askForm").addEventListener("submit", function(e){ e.preventDefault(); submit(input.value); });
+  input.addEventListener("keydown", function(e){ if(e.key==="Enter" && !e.shiftKey){ e.preventDefault(); submit(input.value); } });
+
+  /* simple FAQ list built from the same KB */
+  var list = $("#faqList");
+  KB.filter(function(e){ return e.faq; }).forEach(function(e){
+    var d = document.createElement("details"), s = document.createElement("summary"); s.textContent = e.q; d.appendChild(s);
+    e.a.forEach(function(t){ d.appendChild(el("p",null,t)); });
+    d.addEventListener("toggle", function(){ if(d.open) K.track("faq_open", {id:e.id}); });
+    list.appendChild(d);
+  });
+})();
+</script>
+
+<script>
+/* ============ 08 FLOATING UI: slim mobile CTA bar + scroll to top (shows after ~50% scroll) ============ */
+(function(){
+  var K = window.KAP, $ = K.$;
+  var bar = $("#stickyCta"), top = $("#toTop"); if(!bar || !top) return;
+  var inCard=false, inFoot=false, typing=false;
+  var mqMobile = window.matchMedia ? window.matchMedia("(max-width: 960px)") : {matches:false};
+  function update(){
+    var y = window.scrollY || window.pageYOffset;
+    var showBar = mqMobile.matches && !inCard && !inFoot && !typing && y > 200;
+    bar.classList.toggle("show", showBar);
+    document.body.classList.toggle("has-bar", showBar);
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    var showTop = max > 0 && (y / max) >= 0.5;
+    top.classList.toggle("show", showTop);
+    top.tabIndex = showTop ? 0 : -1;
+  }
+  if("IntersectionObserver" in window){
+    new IntersectionObserver(function(en){ inCard = en[0].isIntersecting; update(); },{threshold:0.05}).observe($("#card"));
+    new IntersectionObserver(function(en){ inFoot = en[0].isIntersecting; update(); },{threshold:0.01}).observe($("#fFoot"));
+  }
+  /* hide the bar while someone is typing so the on-screen keyboard keeps the whole view */
+  document.addEventListener("focusin", function(e){ var t = e.target; typing = !!(t && (t.tagName==="TEXTAREA" || (t.tagName==="INPUT" && t.type!=="range"))); update(); });
+  document.addEventListener("focusout", function(){ typing = false; setTimeout(update, 50); });
+  window.addEventListener("scroll", update, {passive:true});
+  window.addEventListener("resize", update);
+  top.addEventListener("click", function(){
+    K.track("scroll_top");
+    window.scrollTo({top:0, behavior: K.reduce ? "auto" : "smooth"});
+    var h = $("#top"); if(h){ h.setAttribute("tabindex","-1"); h.focus({preventScroll:true}); }
+  });
+  update();
+})();
+</script>
 </body>
 </html>
