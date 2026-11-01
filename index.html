@@ -21,7 +21,7 @@
    Each section has the same number in its CSS, its HTML and its JS.
    00 Tokens + base | 01 Header | 02 Hero + application card | 03 Why Kapitus
    04 Fit check | 05 Reviews carousel | 06 Questions (FAQ + Ask) | 07 Footer
-   08 Floating UI (mobile CTA bar + scroll to top)
+   08 Floating UI (mobile CTA bar + scroll to top) | 09 Application form (focus mode + 20 screens)
    Media queries live inside each section, so you can edit one block safely.
    Compact build: smaller type, tighter spacing and smaller tiles, especially on mobile.
    ===================================================================== */
@@ -368,6 +368,96 @@ h2.title{font-size:clamp(22px,2.6vw,30px);line-height:1.15;letter-spacing:-.025e
   .to-top{width:40px;height:40px;right:12px}
   body.has-bar .to-top{bottom:calc(64px + env(safe-area-inset-bottom,0px))}
 }
+
+/* ============ 09 APPLICATION FORM (focus mode + screens) ============
+   When a visitor starts, <body> gets .form-mode: every other section is hidden and the card is centred. */
+body.form-mode .hero-copy,body.form-mode .hero-proof,body.form-mode #why,body.form-mode #fit,body.form-mode #reviews,body.form-mode #ask,
+body.form-mode .foot-curve,body.form-mode .foot-talk,body.form-mode .foot-grid,body.form-mode .sticky-cta,body.form-mode .to-top,
+body.form-mode .header-right .btn{display:none!important}
+body.form-mode .hero{min-height:calc(100vh - var(--head));min-height:calc(100dvh - var(--head))}
+body.form-mode .hero-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"card";padding:clamp(18px,5vh,56px) 0 40px}
+body.form-mode #apply{align-self:start}
+body.form-mode .card{max-width:640px;margin:0 auto;padding:26px 28px 24px}
+body.form-mode .card::before{display:none}
+body.form-mode .foot{background:var(--p900)}
+body.form-mode .legal{border-top:0;padding-top:20px}
+.fmeta{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:-6px 0 14px}
+.fcat{font-weight:800;font-size:14px;color:var(--accent-ink);letter-spacing:.01em}
+.fcount{font-size:13px;color:var(--muted);font-weight:600}
+.fbody h2{outline:none}
+.step-in{animation:stepin .22s ease-out}
+@keyframes stepin{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
+.hintpill{display:flex;gap:8px;align-items:flex-start;background:var(--lav);border:1px solid rgba(173,0,255,.3);border-radius:14px;padding:8px 12px;margin:2px 0 16px;font-size:13.5px;line-height:1.4}
+.hintpill svg{flex:0 0 18px;margin-top:1px;color:var(--accent-ink)}
+.fbox{display:grid;gap:14px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opts .chip{min-height:52px;font-size:15px}
+.opts.one{grid-template-columns:1fr}
+.opts.three .chip,.opts.two .chip{text-align:center}
+.opts.two{grid-template-columns:1fr 1fr}
+.ff label{display:block;font-weight:700;font-size:14px;margin-bottom:6px}
+.ff input,.ff select{width:100%;height:50px;border:1.5px solid var(--chip-border);border-radius:12px;background:var(--surface2);color:var(--text);font-size:16px;font-weight:600;padding:0 14px}
+.ff select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%235d5866' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:38px}
+.ff input:focus,.ff select:focus{border-color:var(--accent);outline:3px solid rgba(173,0,255,.25);outline-offset:0}
+.ff.bad input,.ff.bad select{border-color:#d4364c}
+.ff input[readonly],.ff select:disabled{background:var(--border);opacity:.8}
+.ft{margin:6px 2px 0;font-size:13px;color:var(--muted);line-height:1.45}
+.ferr{min-height:0;margin:4px 2px 0;color:#d4364c;font-size:13px;font-weight:600}
+.ferr:empty{display:none}
+.pfx{position:relative}
+.pfx-s{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-weight:800;color:var(--muted)}
+.pfx input{padding-left:30px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row3{display:grid;grid-template-columns:1.4fr 1.2fr .8fr;gap:12px}
+.rowdob{display:grid;grid-template-columns:1.4fr .8fr 1fr;gap:12px}
+.sub2{margin:0;font-size:14px;color:var(--muted)}
+.chk{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.4;cursor:pointer;padding:4px 0}
+.chk input{flex:0 0 22px;width:22px;height:22px;margin:0;accent-color:var(--accent);cursor:pointer}
+.chk input:disabled{cursor:not-allowed}
+.tgl{background:none;border:0;padding:4px 0;color:var(--accent-ink);font-weight:700;font-size:14px;cursor:pointer;justify-self:start;text-decoration:underline;text-underline-offset:3px;min-height:32px}
+.fnav{display:flex;justify-content:space-between;gap:12px;margin-top:20px}
+.fnav .btn{width:auto;min-width:130px}
+.fnav .btn-primary{flex:1;max-width:260px;margin-left:auto}
+.fcall{margin:14px 0 0;text-align:center;font-size:13px;color:var(--muted)}
+.fcall a{color:var(--accent-ink);font-weight:700}
+.resume .btn{width:100%;margin-top:6px}
+.drop{border:2px dashed var(--chip-border);border-radius:14px;padding:22px 16px;text-align:center;background:var(--surface2);transition:border-color .15s,background .15s}
+.drop.over{border-color:var(--accent);background:var(--lav)}
+.drop p{margin:0 0 4px;font-weight:700}
+.drop small{display:block;color:var(--muted);margin-bottom:12px}
+.flist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.flist li{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1.5px solid var(--border);border-radius:12px;padding:10px 12px;background:var(--surface2);font-size:14px}
+.flist .nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.flist .sz{color:var(--muted);font-size:12px;margin-left:6px}
+.flist button{background:none;border:0;color:var(--accent-ink);font-weight:700;cursor:pointer;min-height:36px;padding:0 6px}
+.fcount2{font-size:13px;color:var(--muted);font-weight:600}
+.terms{height:210px;overflow:auto;border:1.5px solid var(--chip-border);border-radius:12px;padding:14px;font-size:12.5px;line-height:1.55;background:var(--surface2)}
+.terms p{margin:0 0 10px}
+.terms:focus-visible{outline-offset:2px}
+.sigbox{display:grid;gap:8px}
+.sigcanvas{width:100%;height:120px;border:2px dashed #757575;border-radius:12px;background:#fff;touch-action:none;cursor:crosshair;display:block}
+.sigtype{width:100%;height:120px;border:2px dashed #757575;border-radius:12px;background:#fff;color:#111;padding:0 16px;font-family:"Snell Roundhand","Segoe Script","Brush Script MT",cursive;font-size:34px}
+.sigtools{display:flex;gap:14px}
+.captcha{display:flex;align-items:center;gap:12px;border:1.5px solid var(--chip-border);border-radius:12px;padding:12px 14px;background:var(--surface2);font-weight:600;font-size:15px;cursor:pointer}
+.captcha input{width:24px;height:24px;accent-color:var(--accent);margin:0}
+.captcha small{margin-left:auto;color:var(--muted);font-weight:500;font-size:11px}
+.summary{margin:0;padding:0;list-style:none;display:grid;gap:0;border:1.5px solid var(--border);border-radius:14px;overflow:hidden}
+.summary li{display:flex;justify-content:space-between;gap:12px;padding:12px 14px;font-size:14.5px}
+.summary li + li{border-top:1px solid var(--border)}
+.summary span:last-child{font-weight:700;text-align:right}
+@media (max-width:640px){
+  body.form-mode .wrap{width:calc(100% - 20px)}
+  body.form-mode .card{padding:18px 14px 16px;border-radius:16px}
+  .opts,.opts.two{grid-template-columns:1fr}
+  .opts.two{grid-template-columns:1fr 1fr}
+  .row2{grid-template-columns:1fr 1fr}
+  .row3{grid-template-columns:1fr 1fr}
+  .row3 > :first-child{grid-column:1/-1}
+  .rowdob{grid-template-columns:1.3fr .8fr 1fr}
+  .fnav{flex-direction:column-reverse;gap:8px}
+  .fnav .btn,.fnav .btn-primary{width:100%;max-width:none;margin:0}
+  .terms{height:190px}
+}
 </style>
 </head>
 
@@ -411,53 +501,17 @@ h2.title{font-size:clamp(22px,2.6vw,30px);line-height:1.15;letter-spacing:-.025e
     </div>
 
     <div id="apply">
-      <div class="card" id="card" aria-live="polite">
-        <div class="progress" aria-hidden="true"><i id="bar"></i></div>
-        <div class="welcome" id="welcome" hidden>
-          <span id="welcomeText">Welcome back. We saved your request.</span>
-          <button type="button" class="linkbtn" id="startOver">Start over</button>
+      <!-- The card is the application. Section 09 (script) renders every screen into #fbody. -->
+      <div class="card" id="card">
+        <div class="progress" id="fprog" role="progressbar" aria-label="Application progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="5"><i id="bar"></i></div>
+        <div class="fmeta" id="fmeta" hidden><span class="fcat" id="fcat">Business details</span><span class="fcount" id="fcount"></span></div>
+        <div class="fbody" id="fbody"></div>
+        <div class="fnav" id="fnav" hidden>
+          <button type="button" class="btn btn-ghost" id="fback">Go back</button>
+          <button type="button" class="btn btn-primary" id="fnext">Continue</button>
         </div>
-
-        <!-- step 1: amount -->
-        <div id="step1">
-          <h2>How much funding do you need?</h2>
-          <p class="sub">Enter an amount to start. You can change it anytime.</p>
-          <div class="field" id="amountField">
-            <span class="cur" aria-hidden="true">$</span>
-            <input id="amount" inputmode="numeric" autocomplete="off" value="100,000" aria-label="Funding amount in US dollars" aria-describedby="amountErr">
-          </div>
-          <div class="err" id="amountErr" role="alert"></div>
-          <button type="button" class="btn btn-primary" id="start">Get started</button>
-          <p class="range-note">We provide <b>$5K to $5M</b> in financing. The amount depends on your business profile.</p>
-          <noscript><p class="range-note">Please enable JavaScript to apply here, or call <a href="tel:+16466307618">(646) 630-7618</a>.</p></noscript>
-        </div>
-
-        <!-- step 2: use of funds -->
-        <div id="step2" hidden>
-          <h2>What will this funding help with?</h2>
-          <p class="sub">Select all that apply. This helps us match you to the right options.</p>
-          <div class="chips" id="uses" role="group" aria-label="Use of funds">
-            <button type="button" class="chip" aria-pressed="false">Cash flow</button>
-            <button type="button" class="chip" aria-pressed="false">Inventory</button>
-            <button type="button" class="chip" aria-pressed="false">Payroll</button>
-            <button type="button" class="chip" aria-pressed="false">Repairs or equipment</button>
-            <button type="button" class="chip" aria-pressed="false">Expansion or new hires</button>
-            <button type="button" class="chip" aria-pressed="false">Emergency</button>
-          </div>
-          <button type="button" class="btn btn-primary" id="next2" disabled>Continue</button>
-          <button type="button" class="back" id="back2">Change amount</button>
-        </div>
-
-        <!-- step 3: hand-off to the existing application form (set KAP.cfg.applicationUrl in section 00 script) -->
-        <div id="step3" hidden>
-          <div class="tick" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
-          <h2>You’re off to a great start</h2>
-          <p class="sub" id="summary"></p>
-          <p class="sub">Next, a few quick questions about your business.</p>
-          <button type="button" class="btn btn-primary" id="handoffBtn">Continue</button>
-          <p class="preview-note" id="handoffNote" hidden>Preview only: the application form opens here once it’s connected.</p>
-          <button type="button" class="back" id="back3">Change my answers</button>
-        </div>
+        <p class="fcall" id="fcall" hidden>Questions? Call a financing specialist at <a href="tel:+16466307618">(646) 630-7618</a>.</p>
+        <noscript><p class="range-note">Please enable JavaScript to apply here, or call <a href="tel:+16466307618">(646) 630-7618</a>.</p></noscript>
       </div>
     </div>
 
@@ -677,16 +731,23 @@ h2.title{font-size:clamp(22px,2.6vw,30px);line-height:1.15;letter-spacing:-.025e
 
 <script>
 /* ============ 00 CORE: config, state, dynamic CTA, analytics ============
-   EDIT HERE: phone numbers, amount limits, qualification thresholds, storage, hand-off URL. */
+   EDIT HERE: phone numbers, amount limits, qualification thresholds, storage and form options. */
 window.KAP = (function(){
   var cfg = {
     phoneSales: "(646) 630-7618", phoneSalesTel: "+16466307618",
     amountMin: 5000, amountMax: 5000000, defaultAmount: 100000,
-    typical: {years: 2, revenue: 250000, credit: 650},   /* shown as "typical qualifications" */
-    applicationUrl: "",        /* WIRE-UP: URL of the application form. Receives ?amount=&uses= */
+    typical: {years: 2, revenue: 250000, credit: 650},   /* qualifications used by the fit check and the Ask box */
     resumeDays: 7,             /* how long a started request is remembered in this browser */
-    storageKey: "kap_blhp_v1",
-    analytics: true            /* pushes events to window.dataLayer (GTM) */
+    storageKey: "kap_blhp_v2",
+    analytics: true,           /* pushes events to window.dataLayer (GTM) */
+    form: {
+      autoAdvance: true,       /* single-choice screens move on by themselves after a tap */
+      autoAdvanceDelay: 260,   /* ms */
+      maxFileMB: 10,           /* per bank statement. Must match the real upload limit on the server */
+      minFiles: 1,             /* statements needed to continue (3 expected, 4 in CA and NY) */
+      allowUploadLater: true,  /* "email me a link to upload later" option on the documents screen */
+      submitUrl: ""            /* WIRE-UP: endpoint that receives the finished application (JSON). Empty = preview only */
+    }
   };
   var reduce = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   function $(s,r){ return (r||document).querySelector(s); }
@@ -701,8 +762,9 @@ window.KAP = (function(){
     try{ (window.dataLayer = window.dataLayer || []).push(Object.assign({event:"blhp_" + name}, data || {})); }catch(e){}
   }
 
-  /* progress state (amount, use of funds, step only; stored in this browser, never sent anywhere) */
-  var state = {started:false, step:1, amount:cfg.defaultAmount, uses:[], resumed:false};
+  /* progress state. Only non-personal answers (amount, use of funds, industry, ...) and the step are kept,
+     in this browser only. Names, contact details, DOB, SSN, EIN, addresses and files are never stored. */
+  var state = {started:false, step:0, data:{}, resumed:false};
   function store(){ try{ return window.localStorage; }catch(e){ return null; } }
   function load(){
     var s = store(); if(!s) return;
@@ -710,14 +772,14 @@ window.KAP = (function(){
       var raw = s.getItem(cfg.storageKey); if(!raw) return;
       var d = JSON.parse(raw);
       if(!d || !d.ts || Date.now() - d.ts > cfg.resumeDays * 864e5){ s.removeItem(cfg.storageKey); return; }
-      if(d.started){ state.started = true; state.step = (d.step===3 ? 3 : 2); state.amount = d.amount || cfg.defaultAmount; state.uses = Array.isArray(d.uses) ? d.uses : []; state.resumed = true; }
+      if(d.started){ state.started = true; state.step = d.step|0; state.data = d.data || {}; state.resumed = true; }
     }catch(e){}
   }
   function save(){
     var s = store(); if(!s) return;
-    try{ s.setItem(cfg.storageKey, JSON.stringify({started:state.started, step:state.step, amount:state.amount, uses:state.uses, ts:Date.now()})); }catch(e){}
+    try{ s.setItem(cfg.storageKey, JSON.stringify({started:state.started, step:state.step, data:state.data, ts:Date.now()})); }catch(e){}
   }
-  function clear(){ var s = store(); try{ s && s.removeItem(cfg.storageKey); }catch(e){} state.started=false; state.step=1; state.uses=[]; state.resumed=false; refreshCta(); }
+  function clear(){ var s = store(); try{ s && s.removeItem(cfg.storageKey); }catch(e){} state.started=false; state.step=0; state.data={}; state.resumed=false; refreshCta(); }
   function set(patch){ Object.keys(patch).forEach(function(k){ state[k] = patch[k]; }); if(state.started) save(); refreshCta(); }
 
   /* dynamic CTA: every [data-cta] switches to "continue" once the visitor has started */
@@ -725,98 +787,21 @@ window.KAP = (function(){
     $$("[data-cta]").forEach(function(a){ a.textContent = state.started ? a.dataset["continue"] : a.dataset.start; });
   }
   function goToCard(){
-    var card = $("#card"); if(!card) return;
-    card.scrollIntoView({behavior: reduce ? "auto" : "smooth", block:"center"});
-    setTimeout(function(){
-      var t = (!$("#step1").hidden) ? $("#amount") : ($("#step2").hidden ? $("#handoffBtn") : $("#uses .chip"));
-      if(t){ try{ t.focus({preventScroll:true}); }catch(e){} }
-    }, reduce ? 0 : 450);
+    var card = $("#card"); if(card) card.scrollIntoView({behavior: reduce ? "auto" : "smooth", block:"center"});
   }
+  var api = {cfg:cfg, state:state, $:$, $$:$$, el:el, digits:digits, fmt:fmt, track:track, set:set, clear:clear, save:save, refreshCta:refreshCta, goToCard:goToCard, reduce:reduce};
   document.addEventListener("click", function(e){
     var a = e.target.closest ? e.target.closest("[data-cta]") : null;
     if(!a) return;
     e.preventDefault();
     track("cta_click", {location:a.dataset.loc || "", mode: state.started ? "continue" : "start"});
-    goToCard();
+    if(typeof api.openForm === "function") api.openForm(); else goToCard();   /* openForm comes from section 09 */
   });
 
   load();
   refreshCta();
   document.addEventListener("DOMContentLoaded", refreshCta);
-  return {cfg:cfg, state:state, $:$, $$:$$, el:el, digits:digits, fmt:fmt, track:track, set:set, clear:clear, save:save, refreshCta:refreshCta, goToCard:goToCard, reduce:reduce};
-})();
-</script>
-
-<script>
-/* ============ 02 HERO: application card (amount, use of funds, hand-off, resume) ============ */
-(function(){
-  var K = window.KAP, $ = K.$, $$ = K.$$;
-  if(!$("#card")) return;
-  var cfg = K.cfg, st = K.state;
-  var amount=$("#amount"), field=$("#amountField"), err=$("#amountErr"), bar=$("#bar");
-  var steps = {1:$("#step1"), 2:$("#step2"), 3:$("#step3")};
-  var uses = $$("#uses .chip"), next2=$("#next2"), welcome=$("#welcome");
-  var view = st.started ? st.step : 1;
-
-  function usesChosen(){ return uses.filter(function(x){return x.getAttribute("aria-pressed")==="true"}).map(function(x){return x.textContent}); }
-  function summaryText(){ var u = st.uses.map(function(x){return x.toLowerCase()}); return "$" + K.fmt(st.amount) + (u.length ? " for " + u.join(", ") + "." : "."); }
-  function render(){
-    [1,2,3].forEach(function(n){ steps[n].hidden = (n!==view); });
-    bar.style.width = ({1:6,2:14,3:22})[view] + "%";
-    $("#start").textContent = st.started ? "Continue your application" : "Get started";
-    var showWelcome = st.resumed && view>1;
-    welcome.hidden = !showWelcome;
-    if(showWelcome){ $("#welcomeText").textContent = "Welcome back. We saved your $" + K.fmt(st.amount) + " request."; }
-    if(view===3){ $("#summary").textContent = summaryText(); }
-    next2.disabled = usesChosen().length === 0;
-  }
-  /* restore saved selections */
-  amount.value = K.fmt(st.amount);
-  uses.forEach(function(c){ c.setAttribute("aria-pressed", String(st.uses.indexOf(c.textContent) > -1)); });
-
-  amount.addEventListener("input", function(){
-    amount.value = K.fmt(K.digits(amount.value));
-    field.dataset.invalid = "false"; err.textContent = "";
-  });
-  amount.addEventListener("focus", function(){ setTimeout(function(){ amount.select(); }, 0); });
-  amount.addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); $("#start").click(); } });
-
-  $("#start").addEventListener("click", function(){
-    var n = Number(K.digits(amount.value));
-    if(!n || n < cfg.amountMin || n > cfg.amountMax){
-      field.dataset.invalid = "true";
-      err.textContent = "Enter an amount between $" + K.fmt(cfg.amountMin) + " and $" + K.fmt(cfg.amountMax) + ".";
-      amount.focus(); return;
-    }
-    view = 2; K.set({started:true, step:2, amount:n});
-    K.track("amount_submit", {amount:n});
-    render();
-  });
-  uses.forEach(function(c){
-    c.addEventListener("click", function(){
-      c.setAttribute("aria-pressed", String(c.getAttribute("aria-pressed")!=="true"));
-      K.set({uses: usesChosen()}); next2.disabled = usesChosen().length===0;
-    });
-  });
-  $("#back2").addEventListener("click", function(){ view = 1; render(); amount.focus(); });
-  next2.addEventListener("click", function(){
-    view = 3; K.set({step:3, uses:usesChosen()});
-    K.track("uses_continue", {count: st.uses.length});
-    render();
-  });
-  $("#back3").addEventListener("click", function(){ view = 2; K.set({step:2}); render(); });
-  $("#handoffBtn").addEventListener("click", function(){
-    K.track("handoff", {amount: st.amount, uses_count: st.uses.length});
-    if(cfg.applicationUrl){
-      var sep = cfg.applicationUrl.indexOf("?") > -1 ? "&" : "?";
-      window.location.href = cfg.applicationUrl + sep + "amount=" + encodeURIComponent(st.amount) + "&uses=" + encodeURIComponent(st.uses.join(","));
-    } else { $("#handoffNote").hidden = false; }
-  });
-  $("#startOver").addEventListener("click", function(){
-    K.clear(); uses.forEach(function(c){ c.setAttribute("aria-pressed","false"); });
-    amount.value = K.fmt(cfg.defaultAmount); view = 1; render(); amount.focus();
-  });
-  render();
+  return api;
 })();
 </script>
 
@@ -1236,11 +1221,12 @@ var KB = [
   var mqMobile = window.matchMedia ? window.matchMedia("(max-width: 960px)") : {matches:false};
   function update(){
     var y = window.scrollY || window.pageYOffset;
-    var showBar = mqMobile.matches && !inCard && !inFoot && !typing && y > 200;
+    var inForm = document.body.classList.contains("form-mode");
+    var showBar = mqMobile.matches && !inCard && !inFoot && !typing && !inForm && y > 200;
     bar.classList.toggle("show", showBar);
     document.body.classList.toggle("has-bar", showBar);
     var max = document.documentElement.scrollHeight - window.innerHeight;
-    var showTop = max > 0 && (y / max) >= 0.5;
+    var showTop = !inForm && max > 0 && (y / max) >= 0.5;
     top.classList.toggle("show", showTop);
     top.tabIndex = showTop ? 0 : -1;
   }
@@ -1261,5 +1247,625 @@ var KB = [
   update();
 })();
 </script>
+<script>
+/* ============ 09 APPLICATION FORM: focus mode + 20 screens ============
+   Follows the live /simple/ form (same questions, options, helper text and rules). Co-owner screens are skipped for now.
+   Order: Business details (10) > Profile information (7) > Documents (3).
+   EDIT HERE: STEPS (order, copy, options), the validators, TERMS_HTML. Options for the form live in cfg.form (section 00).
+   PRIVACY: personal answers stay in memory only. Nothing is stored or sent unless cfg.form.submitUrl is set. */
+(function(){
+  var K = window.KAP, $ = K.$, $$ = K.$$, el = K.el, cfg = K.cfg, F = cfg.form, st = K.state;
+  var card = $("#card"); if(!card) return;
+  var body=$("#fbody"), bar=$("#bar"), prog=$("#fprog"), meta=$("#fmeta"), catEl=$("#fcat"), cntEl=$("#fcount"),
+      nav=$("#fnav"), backBtn=$("#fback"), nextBtn=$("#fnext"), callEl=$("#fcall");
+  var reduce = K.reduce, formMode = false, finished = false, idx = 0, ctrl = null, leaving = false, advTimer = null;
+  var A = {};                                   /* all answers (personal ones never leave memory) */
+  var SAFE = ["amount","uses","usesOther","industry","industryOther","entity","entityOther","startMonth","startYear","ownership","revenue","loans","loanBalance"];
+  SAFE.forEach(function(k){ if(st.data && st.data[k]!=null) A[k] = st.data[k]; });
+  function safeData(){ var o = {}; SAFE.forEach(function(k){ if(A[k]!=null) o[k] = A[k]; }); return o; }
+
+  /* ---------- options (from the /simple/ form) ---------- */
+  var CATS = ["Business details","Profile information","Documents"];
+  var USES = ["Cash flow","Inventory","Payroll","Repairs or equipment","Expansion or new hires","Emergency"];
+  var INDUSTRY = ["Construction","Business / IT","Health Care","Personal Services","Transportation","Education","Automotive","Real Estate","Food / Hospitality"];
+  var ENTITY = ["Professional LLC","S Corporation / C Corporation","Professional Corporation (PC)","Sole Proprietorship"];
+  var OWN = ["Less than 25%","25% to 50%","51% to 99%","100%"];
+  var REV = ["$0 to $100K","$100K to $250K","$250K to $500K","$500K to $750K","$750K to $1M","$1M to $3M","$3M+"];
+  var BAL = ["Below $10K","$10K to $50K","$50K to $100K","$100K to $500K","$500K+"];
+  var CREDIT = ["599 and below","600 to 649","650 to 679","680 to 699","700 to 719","720 to 739","740 and above"];
+  var REFERRAL = ["Internet search","ChatGPT or similar","Radio or Podcast","Social Media","Digital ads","TV or Streaming","Direct Mail","Referral / word of mouth"];
+  var STATES = "Alabama,Alaska,American Samoa,Arizona,Arkansas,California,Colorado,Connecticut,Delaware,District of Columbia,Florida,Georgia,Hawaii,Idaho,Illinois,Indiana,Iowa,Kansas,Kentucky,Louisiana,Maine,Maryland,Massachusetts,Michigan,Minnesota,Mississippi,Missouri,Montana,Nebraska,Nevada,New Hampshire,New Jersey,New Mexico,New York,North Carolina,North Dakota,Ohio,Oklahoma,Oregon,Pennsylvania,Puerto Rico,Rhode Island,South Carolina,South Dakota,Tennessee,Texas,Utah,Vermont,Virginia,Washington,West Virginia,Wisconsin,Wyoming".split(",");
+  var MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  function opt(list){ return list.map(function(x){ return {v:x, t:x}; }); }
+  var NOW = new Date(), CY = NOW.getFullYear(), CM = NOW.getMonth()+1;
+  function range(from, to){ var o = [], i; if(from<=to){ for(i=from;i<=to;i++) o.push({v:String(i),t:String(i)}); } else { for(i=from;i>=to;i--) o.push({v:String(i),t:String(i)}); } return o; }
+  var MONTH_OPTS = MONTHS.map(function(m,i){ return {v:String(i+1), t:m}; });
+
+  /* ---------- masks and validators ---------- */
+  function fmtPhone(d){ d = d.slice(0,10); if(d.length<4) return d ? "("+d : ""; if(d.length<7) return "("+d.slice(0,3)+") "+d.slice(3); return "("+d.slice(0,3)+") "+d.slice(3,6)+"-"+d.slice(6); }
+  function fmtEIN(d){ d = d.slice(0,9); return d.length<3 ? d : d.slice(0,2)+"-"+d.slice(2); }
+  function fmtSSN(d){ d = d.slice(0,9); if(d.length<4) return d; if(d.length<6) return d.slice(0,3)+"-"+d.slice(3); return d.slice(0,3)+"-"+d.slice(3,5)+"-"+d.slice(5); }
+  function attachMask(input, fmtFn){
+    var prev = input.value;
+    input.addEventListener("input", function(e){
+      var d = K.digits(input.value);
+      if(e.inputType==="deleteContentBackward" && fmtFn(d)===prev) d = d.slice(0,-1);   /* deleting a separator removes the digit before it */
+      var out = fmtFn(d); input.value = out; prev = out;
+    });
+  }
+  var vName = function(label){ return function(v){ return (v.length>=2 && /^[A-Za-z][A-Za-z\s'.-]*$/.test(v)) ? "" : "Enter your " + label + "."; }; };
+  var vText = function(msg){ return function(v){ return v.length>=2 ? "" : msg; }; };
+  function vPhone(v){ var d = K.digits(v); return (d.length===10 && !/^(\d)\1{9}$/.test(d)) ? "" : "Please enter a valid phone number."; }
+  function vEmail(v){ return (/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) && !/\.\./.test(v)) ? "" : "Please enter a valid email address."; }
+  function vZip(v){ return (/^\d{5}$/.test(v) && !/^(\d)\1{4}$/.test(v)) ? "" : "Please enter a valid 5-digit ZIP code."; }
+  function vEIN(v){ return K.digits(v).length===9 ? "" : "Please enter your business’s 9-digit EIN."; }
+  function vSSN(v){ return K.digits(v).length===9 ? "" : "Please enter a valid Social Security Number."; }
+  function vStreet(v){ return v.length>=3 ? "" : "Please enter a valid street address."; }
+  function vCity(v){ return (v.length>=2 && !/\d/.test(v)) ? "" : "Please enter a valid city."; }
+  function vState(v){ return v ? "" : "Select your state."; }
+  function vWeb(v){ return (!v || /^(https?:\/\/)?[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)+(\/\S*)?$/.test(v)) ? "" : "Please enter a valid website, or leave this blank."; }
+
+  /* ---------- small UI helpers ---------- */
+  function icon(kind){
+    return kind==="lock"
+      ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>'
+      : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.500 1 2.500h6c0-1 .2-1.700 1-2.500A6 6 0 0 0 12 3z"/></svg>';
+  }
+  function hintPill(text, kind){ var d = el("div","hintpill"); d.innerHTML = icon(kind); d.appendChild(el("span",null,text)); return d; }
+  function field(def){
+    var id = "f_" + def.key, w = el("div","ff"), l = el("label",null,def.label); l.setAttribute("for", id); w.appendChild(l);
+    var i;
+    if(def.options){
+      i = document.createElement("select");
+      var ph = document.createElement("option"); ph.value = ""; ph.textContent = def.placeholder || "Select"; i.appendChild(ph);
+      def.options.forEach(function(o){ var op = document.createElement("option"); op.value = o.v; op.textContent = o.t; i.appendChild(op); });
+    } else {
+      i = document.createElement("input"); i.type = def.type || "text";
+      if(def.inputmode) i.setAttribute("inputmode", def.inputmode);
+      if(def.maxlength) i.maxLength = def.maxlength;
+      if(def.placeholder) i.placeholder = def.placeholder;
+    }
+    i.id = id; i.name = def.key; i.setAttribute("autocomplete", def.autocomplete || "off");
+    if(def.value!=null) i.value = def.value;
+    if(def.prefix){ var pw = el("div","pfx"); pw.appendChild(el("span","pfx-s",def.prefix)); pw.appendChild(i); w.appendChild(pw); } else { w.appendChild(i); }
+    var h = null; if(def.help){ h = el("div","ft",def.help); h.id = id+"_h"; w.appendChild(h); }
+    var e = el("div","ferr"); e.id = id+"_e"; w.appendChild(e);
+    i.setAttribute("aria-describedby", (h ? id+"_h " : "") + id+"_e");
+    if(def.mask) attachMask(i, def.mask);
+    var api = {wrap:w, el:i,
+      get:function(){ return i.value.trim(); }, set:function(v){ i.value = v==null ? "" : v; },
+      show:function(m){ e.textContent = m || ""; i.setAttribute("aria-invalid", m ? "true" : "false"); w.classList.toggle("bad", !!m); },
+      check:function(){ var m = def.validate ? def.validate(api.get()) : ""; api.show(m); return !m; }};
+    i.addEventListener("blur", function(){ if(api.get()) api.check(); });
+    i.addEventListener(def.options ? "change" : "input", function(){ if(w.classList.contains("bad")) api.check(); });
+    return api;
+  }
+  function validateAll(list, stepId){
+    var ok = true, firstBad = null;
+    list.forEach(function(f){ if(!f.check()){ ok = false; if(!firstBad) firstBad = f; } });
+    if(!ok){ firstBad.el.focus(); K.track("form_error", {step:stepId}); }
+    return ok;
+  }
+  function setNext(show){ nextBtn.hidden = !show; }
+
+  /* ---------- screen builders: each returns {next(): validate + save, hideNext?} ---------- */
+  var builders = {};
+
+  builders.amount = function(s, box){
+    var intro = !formMode;
+    if(intro) box.appendChild(el("p","sub","Enter an amount to start. You can change it anytime."));
+    var f = el("div","field"); f.id = "amountField";
+    f.appendChild(el("span","cur","$")).setAttribute("aria-hidden","true");
+    var inp = document.createElement("input"); inp.id = "amount"; inp.setAttribute("inputmode","numeric"); inp.setAttribute("autocomplete","off");
+    inp.setAttribute("aria-label","Funding amount in US dollars"); inp.setAttribute("aria-describedby","amountErr");
+    inp.value = K.fmt(A.amount || cfg.defaultAmount); f.appendChild(inp);
+    var err = el("div","err"); err.id = "amountErr"; err.setAttribute("role","alert");
+    box.appendChild(f); box.appendChild(err);
+    inp.addEventListener("input", function(){ inp.value = K.fmt(K.digits(inp.value)); f.dataset.invalid = "false"; err.textContent = ""; });
+    inp.addEventListener("focus", function(){ setTimeout(function(){ inp.select(); }, 0); });
+    function commit(){
+      var n = Number(K.digits(inp.value));
+      if(!n || n < cfg.amountMin || n > cfg.amountMax){
+        f.dataset.invalid = "true"; err.textContent = "Enter an amount between $" + K.fmt(cfg.amountMin) + " and $" + K.fmt(cfg.amountMax) + ".";
+        inp.focus(); return false;
+      }
+      A.amount = n; return true;
+    }
+    if(intro){
+      var b = el("button","btn btn-primary","Get started"); b.type = "button"; b.id = "start"; box.appendChild(b);
+      var rn = el("p","range-note"); rn.innerHTML = "We provide <b>$5K to $5M</b> in financing. The amount depends on your business profile."; box.appendChild(rn);
+      var go = function(){
+        if(!commit()) return;
+        K.track("amount_submit", {amount:A.amount});
+        idx = 1; K.set({started:true}); persist(); enter();
+      };
+      b.addEventListener("click", go);
+      inp.addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); go(); } });
+    } else {
+      inp.addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); next(); } });
+    }
+    return {next:commit, hideNext:intro, focus:function(){ inp.focus(); }};
+  };
+
+  /* single choice as chips; optional "Other" with a text field; auto-advance after a tap */
+  builders.single = function(s, box){
+    var val = A[s.key] || "", err = el("div","ferr"), chips = [];
+    var grid = el("div","opts" + (s.cols ? " "+s.cols : "")); grid.setAttribute("role","group"); grid.setAttribute("aria-label", s.title);
+    function mk(label){ var b = el("button","chip",label); b.type = "button"; b.setAttribute("aria-pressed", String(val===label)); b.addEventListener("click", function(){ choose(label); }); chips.push(b); grid.appendChild(b); }
+    s.options.forEach(mk);
+    if(s.other) mk("Other");
+    box.appendChild(grid);
+    var oi = null;
+    if(s.other){
+      oi = field({key:s.key+"_other", label:"Please specify", autocomplete:"off", validate:vText("Please describe your answer.")});
+      oi.wrap.hidden = val !== "Other"; oi.set(A[s.key+"Other"] || ""); box.appendChild(oi.wrap);
+    }
+    box.appendChild(err);
+    function choose(v){
+      val = v; err.textContent = "";
+      chips.forEach(function(b){ b.setAttribute("aria-pressed", String(b.textContent===v)); });
+      if(oi) oi.wrap.hidden = (v !== "Other");
+      if(v === "Other"){ setNext(true); oi.el.focus(); return; }
+      A[s.key] = v; delete A[s.key+"Other"];
+      if(s.auto && F.autoAdvance){
+        setNext(false); clearTimeout(advTimer);
+        advTimer = setTimeout(function(){ if(STEPS[idx]===s) next(); }, reduce ? 0 : F.autoAdvanceDelay);
+      } else { setNext(true); }
+    }
+    return {
+      next:function(){
+        if(!val){ err.textContent = "Please select an option."; return false; }
+        if(val==="Other"){ if(!oi.check()){ oi.el.focus(); return false; } A[s.key] = "Other"; A[s.key+"Other"] = oi.get(); }
+        else { A[s.key] = val; }
+        return true;
+      },
+      hideNext: !!(s.auto && F.autoAdvance && !A[s.key])
+    };
+  };
+
+  builders.multi = function(s, box){
+    var vals = (A[s.key] || []).slice(), err = el("div","ferr"), chips = [];
+    var grid = el("div","opts"); grid.setAttribute("role","group"); grid.setAttribute("aria-label", s.title);
+    function mk(label){ var b = el("button","chip",label); b.type = "button"; b.setAttribute("aria-pressed", String(vals.indexOf(label)>-1)); b.addEventListener("click", function(){ toggle(label); }); chips.push(b); grid.appendChild(b); }
+    s.options.forEach(mk); if(s.other) mk("Other");
+    box.appendChild(grid);
+    var oi = null;
+    if(s.other){ oi = field({key:s.key+"_other", label:"Please specify", validate:vText("Please describe your answer.")}); oi.wrap.hidden = vals.indexOf("Other")<0; oi.set(A[s.key+"Other"] || ""); box.appendChild(oi.wrap); }
+    box.appendChild(err);
+    function toggle(label){
+      var i = vals.indexOf(label); if(i>-1) vals.splice(i,1); else vals.push(label);
+      chips.forEach(function(b){ if(b.textContent===label) b.setAttribute("aria-pressed", String(vals.indexOf(label)>-1)); });
+      if(oi){ oi.wrap.hidden = vals.indexOf("Other")<0; if(label==="Other" && !oi.wrap.hidden) oi.el.focus(); }
+      err.textContent = "";
+    }
+    return {next:function(){
+      if(!vals.length){ err.textContent = "Select at least one option."; return false; }
+      if(vals.indexOf("Other")>-1){ if(!oi.check()){ oi.el.focus(); return false; } A[s.key+"Other"] = oi.get(); } else { delete A[s.key+"Other"]; }
+      A[s.key] = vals.slice(); return true;
+    }};
+  };
+
+  builders.monthyear = function(s, box){
+    var m = field({key:"startMonth", label:"Month", options:MONTH_OPTS, value:A.startMonth, validate:function(v){ return v ? "" : "Please select a month."; }});
+    var y = field({key:"startYear", label:"Year", options:range(CY,1920), value:A.startYear, validate:function(v){ return v ? "" : "Please select a year."; }});
+    var row = el("div","row2"); row.appendChild(m.wrap); row.appendChild(y.wrap); box.appendChild(row);
+    return {next:function(){
+      if(!validateAll([m,y], s.id)) return false;
+      if(Number(y.get())===CY && Number(m.get())>CM){ m.show("Please choose a date in the past."); m.el.focus(); return false; }
+      A.startMonth = m.get(); A.startYear = y.get(); return true;
+    }};
+  };
+
+  builders.loans = function(s, box){
+    var val = A.loans || "", err = el("div","ferr");
+    var grid = el("div","opts one"); var chips = [];
+    [["No","No, I don’t have existing loans"],["Yes","Yes, I have existing loans"]].forEach(function(o){
+      var b = el("button","chip",o[1]); b.type = "button"; b.dataset.v = o[0]; b.setAttribute("aria-pressed", String(val===o[0])); chips.push(b); grid.appendChild(b);
+      b.addEventListener("click", function(){ choose(o[0]); });
+    });
+    box.appendChild(grid);
+    var more = el("div","fbox"); more.hidden = val !== "Yes";
+    var lender = field({key:"lender", label:"Lender name", autocomplete:"organization", value:A.lender, validate:vText("Please enter your lender’s name.")});
+    var balWrap = el("div"); balWrap.appendChild(el("div","sub2","Loan balance"));
+    var bal = el("div","opts"); bal.setAttribute("role","group"); bal.setAttribute("aria-label","Loan balance"); var balChips = [];
+    var balVal = A.loanBalance || "";
+    BAL.forEach(function(x){ var b = el("button","chip",x); b.type = "button"; b.setAttribute("aria-pressed", String(balVal===x)); b.addEventListener("click", function(){ balVal = x; balChips.forEach(function(c){ c.setAttribute("aria-pressed", String(c.textContent===x)); }); err.textContent = ""; }); balChips.push(b); bal.appendChild(b); });
+    balWrap.appendChild(bal); more.appendChild(lender.wrap); more.appendChild(balWrap); box.appendChild(more); box.appendChild(err);
+    function choose(v){
+      val = v; err.textContent = "";
+      chips.forEach(function(b){ b.setAttribute("aria-pressed", String(b.dataset.v===v)); });
+      more.hidden = (v !== "Yes");
+      if(v==="No"){ A.loans = "No"; delete A.lender; delete A.loanBalance;
+        if(F.autoAdvance){ setNext(false); clearTimeout(advTimer); advTimer = setTimeout(function(){ if(STEPS[idx]===s) next(); }, reduce ? 0 : F.autoAdvanceDelay); } else setNext(true);
+      } else { setNext(true); lender.el.focus(); }
+    }
+    return {next:function(){
+      if(!val){ err.textContent = "Please select an option."; return false; }
+      if(val==="Yes"){
+        if(!lender.check()){ lender.el.focus(); return false; }
+        if(!balVal){ err.textContent = "Please select your loan balance."; return false; }
+        A.lender = lender.get(); A.loanBalance = balVal;
+      }
+      A.loans = val; return true;
+    }, hideNext: !!(F.autoAdvance && val !== "Yes")};
+  };
+
+  builders.bizname = function(s, box){
+    var dba = field({key:"dba", label:"DBA (business name)", autocomplete:"organization", value:A.dba, validate:vText("Please enter your business name.")});
+    var legal = field({key:"legal", label:"Legal business name", autocomplete:"organization", value:A.legal, validate:vText("Please enter your legal business name.")});
+    var ein = field({key:"ein", label:"EIN / Tax ID", inputmode:"numeric", maxlength:10, mask:fmtEIN, value:A.ein, placeholder:"00-0000000",
+      help:"This is your business’s Tax ID. You can find it on your latest business tax return. We use this information to verify your business.", validate:vEIN});
+    box.appendChild(dba.wrap); box.appendChild(legal.wrap); box.appendChild(ein.wrap);
+    var q = el("div"); q.appendChild(el("div","sub2","Do you own multiple locations or businesses?"));
+    var grid = el("div","opts two"); var mv = A.multi || ""; var chips = [];
+    ["Yes","No"].forEach(function(x){ var b = el("button","chip",x); b.type = "button"; b.setAttribute("aria-pressed", String(mv===x)); b.addEventListener("click", function(){ mv = x; chips.forEach(function(c){ c.setAttribute("aria-pressed", String(c.textContent===x)); }); err.textContent = ""; }); chips.push(b); grid.appendChild(b); });
+    var err = el("div","ferr"); q.appendChild(grid); q.appendChild(err); box.appendChild(q);
+    return {next:function(){
+      var ok = validateAll([dba,legal,ein], s.id);
+      if(!mv){ err.textContent = "Please select an option."; ok = false; }
+      if(!ok) return false;
+      A.dba = dba.get(); A.legal = legal.get(); A.ein = ein.get(); A.multi = mv; return true;
+    }};
+  };
+
+  builders.address = function(s, box){
+    var p = s.prefix, fs = {};
+    var same = null;
+    if(s.sameAs){
+      var lab = el("label","chk"); same = document.createElement("input"); same.type = "checkbox"; same.checked = !!A.homeSame;
+      lab.appendChild(same); lab.appendChild(el("span",null,"Same as business address")); box.appendChild(lab);
+    }
+    fs.street = field({key:p+"Street", label:"Street address", autocomplete:"address-line1", value:A[p+"Street"], validate:vStreet});
+    fs.city = field({key:p+"City", label:"City", autocomplete:"address-level2", value:A[p+"City"], validate:vCity});
+    fs.state = field({key:p+"State", label:"State", options:opt(STATES), placeholder:"Select state", autocomplete:"address-level1", value:A[p+"State"], validate:vState});
+    fs.zip = field({key:p+"Zip", label:"ZIP code", inputmode:"numeric", maxlength:5, mask:function(d){ return d.slice(0,5); }, autocomplete:"postal-code", value:A[p+"Zip"], validate:vZip});
+    box.appendChild(fs.street.wrap);
+    var row = el("div","row3"); row.appendChild(fs.city.wrap); row.appendChild(fs.state.wrap); row.appendChild(fs.zip.wrap); box.appendChild(row);
+    var web = null;
+    if(s.website){ web = field({key:"bizWeb", label:"Website (optional)", inputmode:"url", autocomplete:"url", value:A.bizWeb, validate:vWeb}); box.appendChild(web.wrap); }
+    function lock(on){
+      ["street","city","state","zip"].forEach(function(k){
+        var f = fs[k], map = {street:"bizStreet",city:"bizCity",state:"bizState",zip:"bizZip"};
+        if(on){ f.set(A[map[k]] || ""); }
+        if(k==="state") f.el.disabled = on; else f.el.readOnly = on;
+        f.show("");
+      });
+    }
+    if(same){ lock(same.checked); same.addEventListener("change", function(){ lock(same.checked); if(!same.checked){ ["street","city","state","zip"].forEach(function(k){ fs[k].set(""); }); } }); }
+    return {next:function(){
+      var list = [fs.street,fs.city,fs.state,fs.zip]; if(web) list.push(web);
+      if(!validateAll(list, s.id)) return false;
+      A[p+"Street"] = fs.street.get(); A[p+"City"] = fs.city.get(); A[p+"State"] = fs.state.el.value; A[p+"Zip"] = fs.zip.get();
+      if(web) A.bizWeb = web.get(); if(same) A.homeSame = same.checked;
+      return true;
+    }};
+  };
+
+  /* fields-only screens (name, contact) */
+  builders.fields = function(s, box){
+    var list = s.fields.map(function(d){ var o = Object.assign({}, d); o.value = A[d.key]; return field(o); });
+    var grid = el(list.length===2 ? "row2" : "fbox");
+    list.forEach(function(f){ grid.appendChild(f.wrap); }); box.appendChild(grid);
+    return {next:function(){ if(!validateAll(list, s.id)) return false; list.forEach(function(f, i){ A[s.fields[i].key] = f.get(); }); return true; }};
+  };
+
+  builders.dob = function(s, box){
+    var m = field({key:"dobM", label:"Month", options:MONTH_OPTS, autocomplete:"bday-month", value:A.dobM, validate:function(v){ return v ? "" : "Select a month."; }});
+    var d = field({key:"dobD", label:"Day", options:range(1,31), autocomplete:"bday-day", value:A.dobD, validate:function(v){ return v ? "" : "Select a day."; }});
+    var y = field({key:"dobY", label:"Year", options:range(CY-18,1920), autocomplete:"bday-year", value:A.dobY, validate:function(v){ return v ? "" : "Select a year."; }});
+    var row = el("div","rowdob"); row.appendChild(m.wrap); row.appendChild(d.wrap); row.appendChild(y.wrap); box.appendChild(row);
+    var err = el("div","ferr"); box.appendChild(err);
+    return {next:function(){
+      err.textContent = "";
+      if(!validateAll([m,d,y], s.id)) return false;
+      var Y = Number(y.get()), M = Number(m.get()), D = Number(d.get()), dt = new Date(Y, M-1, D);
+      if(dt.getFullYear()!==Y || dt.getMonth()!==M-1 || dt.getDate()!==D){ err.textContent = "Please enter a valid date."; return false; }
+      var age = CY - Y - ((NOW.getMonth()+1 < M || (NOW.getMonth()+1===M && NOW.getDate() < D)) ? 1 : 0);
+      if(age < 18){ err.textContent = "You must be at least 18 to apply."; return false; }
+      A.dobM = m.get(); A.dobD = d.get(); A.dobY = y.get(); return true;
+    }};
+  };
+
+  builders.ssn = function(s, box){
+    var f = field({key:"ssn", label:"Social Security Number", type:"password", inputmode:"numeric", maxlength:11, mask:fmtSSN, autocomplete:"off", value:A.ssn, placeholder:"000-00-0000", validate:vSSN});
+    box.appendChild(f.wrap);
+    var t = el("button","tgl","Show"); t.type = "button"; t.setAttribute("aria-pressed","false");
+    t.addEventListener("click", function(){ var show = f.el.type==="password"; f.el.type = show ? "text" : "password"; t.textContent = show ? "Hide" : "Show"; t.setAttribute("aria-pressed", String(show)); });
+    box.appendChild(t);
+    return {next:function(){ if(!validateAll([f], s.id)) return false; A.ssn = f.get(); return true; }};
+  };
+
+  /* documents: drag and drop or select, with visible errors (type, size, count) */
+  builders.upload = function(s, box){
+    var need = (A.bizState==="California" || A.bizState==="New York") ? 4 : 3;
+    A.files = A.files || [];
+    box.appendChild(el("p","sub2","Please upload your " + need + " most recent, complete bank statements for your business."));
+    box.appendChild(el("p","sub2","You can download recent statements from your online banking portal. PDF format preferred."));
+    var drop = el("div","drop");
+    drop.appendChild(el("p",null,"Choose a file or drag & drop it here"));
+    drop.appendChild(el("small",null,"JPEG, PNG and PDF, up to " + F.maxFileMB + " MB each"));
+    var pick = el("button","btn btn-ghost btn-sm","Select files"); pick.type = "button";
+    var fi = document.createElement("input"); fi.type = "file"; fi.multiple = true; fi.hidden = true;
+    fi.accept = ".pdf,.jpg,.jpeg,.png,image/jpeg,image/png,application/pdf";
+    drop.appendChild(pick); drop.appendChild(fi); box.appendChild(drop);
+    var err = el("div","ferr"); err.setAttribute("role","alert"); box.appendChild(err);
+    var list = el("ul","flist"); box.appendChild(list);
+    var count = el("div","fcount2"); box.appendChild(count);
+    var later = null;
+    if(F.allowUploadLater){
+      var lab = el("label","chk"); later = document.createElement("input"); later.type = "checkbox"; later.checked = !!A.uploadLater;
+      lab.appendChild(later); lab.appendChild(el("span",null,"I don’t have these handy. Email me a secure link to upload them later.")); box.appendChild(lab);
+      later.addEventListener("change", function(){ A.uploadLater = later.checked; err.textContent = ""; });
+    }
+    function size(n){ return n < 1048576 ? Math.max(1,Math.round(n/1024)) + " KB" : (n/1048576).toFixed(1) + " MB"; }
+    function paint(){
+      list.innerHTML = "";
+      A.files.forEach(function(f, i){
+        var li = el("li"); var left = el("span","nm",f.name); left.appendChild(el("span","sz",size(f.size)));
+        var rm = el("button",null,"Remove"); rm.type = "button"; rm.setAttribute("aria-label","Remove " + f.name);
+        rm.addEventListener("click", function(){ A.files.splice(i,1); err.textContent = ""; paint(); });
+        li.appendChild(left); li.appendChild(rm); list.appendChild(li);
+      });
+      count.textContent = A.files.length + " of " + need + " files added";
+    }
+    function add(fl){
+      var msgs = [];
+      Array.prototype.forEach.call(fl, function(f){
+        var ext = (f.name.split(".").pop() || "").toLowerCase();
+        if(["pdf","jpg","jpeg","png"].indexOf(ext) < 0){ msgs.push(f.name + " isn’t a supported type. Use PDF, JPG or PNG."); return; }
+        if(f.size > F.maxFileMB * 1048576){ msgs.push(f.name + " is " + size(f.size) + ". The limit is " + F.maxFileMB + " MB per file."); return; }
+        if(A.files.some(function(x){ return x.name===f.name && x.size===f.size; })){ return; }
+        if(A.files.length >= need){ msgs.push("You can add up to " + need + " files."); return; }
+        A.files.push(f);
+      });
+      err.textContent = msgs.join(" "); paint();
+    }
+    pick.addEventListener("click", function(){ fi.click(); });
+    fi.addEventListener("change", function(){ add(fi.files); fi.value = ""; });
+    ["dragenter","dragover"].forEach(function(ev){ drop.addEventListener(ev, function(e){ e.preventDefault(); drop.classList.add("over"); }); });
+    ["dragleave","drop"].forEach(function(ev){ drop.addEventListener(ev, function(e){ e.preventDefault(); drop.classList.remove("over"); }); });
+    drop.addEventListener("drop", function(e){ if(e.dataTransfer && e.dataTransfer.files) add(e.dataTransfer.files); });
+    paint();
+    return {next:function(){
+      if(A.files.length >= F.minFiles || (later && later.checked)){ return true; }
+      err.textContent = "Add at least " + F.minFiles + " statement" + (F.minFiles>1 ? "s" : "") + (later ? ", or choose to upload them later." : "."); return false;
+    }};
+  };
+
+  /* acknowledgement: terms must be scrolled before the checkbox works */
+  var TERMS_HTML = `
+<p>The Business and Owner(s) identified above (collectively, the “Applicant”) each represent, acknowledge and agree to the Representations and Acknowledgments set forth below. In processing this application, Kapitus may request credit reports from one or more credit bureaus on the Business and Owner(s) (the Owners(s)’ personal credit score will not be affected by Kapitus’s request). Applicant further represents, acknowledges and agrees to the Consents Relating to the Referral of Application to Third-Parties, the Consent to Use Electronic Records and Signatures, and the Promotions and the Services Notice set forth below. Please note that you are not required to consent to be contacted for marketing or promotional purposes in order to qualify for financing or obtain products or services from Kapitus.</p>
+<p><u>Representations and Acknowledgments of Applicant</u></p>
+<p>1. All information and documents provided by the Applicant directly or indirectly, in connection with or as part of this application are true, accurate and complete;<br>
+2. Applicant will immediately notify Kapitus and/or its subsidiaries, affiliates or agents (collectively, “Kapitus”) of any error or change in such information or in the Applicant’s financial condition;<br>
+3. Kapitus is authorized to request and receive consumer or personal, and business or entity, credit reports from one or more credit bureaus, such as TransUnion, Experian or Equifax, investigative reports about the Applicant from third party data aggregators, and other financial information about Applicant, including credit card processor statements and bank statements, directly from credit bureaus, banks, creditors or other third parties, and to verify through third-party sources all information contained, provided, or obtained in connection with the Application;<br>
+4. Applicant waives and releases any claims against Kapitus arising from any act or omission relating to Kapitus’s request for, receipt of or release of information as authorized by this Application;<br>
+5. Each Owner represents that they are authorized to execute any documents on behalf of the Business and to bind the Business;<br>
+6. Applicant agrees to conduct business by electronic means, including without limitation the receipt by email of agreements, communications, notices, authorizations, disclosures (including any and all disclosures and/or notices required to be given by applicable law), and any other records we provide (collectively, “Communications”). Applicant understands and acknowledges that electronic signatures shall have the same legal effect as if signed in ink and will be deemed valid, enforceable, and binding.</p>
+<p><u>Consents Relating to the Referral of the Application to Third-Parties for Purposes of Securing Financing</u></p>
+<p>1. Applicant authorizes Kapitus to provide the Application, including all information and documents obtained (such as, without limitation, information obtained from credit reports) to third-party financial institutions, lenders, loan servicers, purchasers of accounts receivable, factoring companies, equipment finance or leasing companies, brokers or other similar sources of commercial financing (collectively, “Third-Parties”) in connection with or following the processing of this Application for financing by Kapitus.<br>
+2. Applicant authorizes the Third-Parties to whom the Application is provided to, separately and on their own behalf, request and receive consumer or personal, and business or entity, credit reports from one or more credit bureaus, such as TransUnion, Experian or Equifax, investigative reports about the Applicant from third party data aggregators, and other financial information about Applicant, including credit card processor statements and bank statements, directly from credit bureaus, banks, creditors or other third parties, and to verify through third-party sources all information contained, provided, or obtained in connection with the Application. Such inquiries by Third Parties may be “hard credit pulls” that may impact the credit score of the Business and/or the Owner(s).</p>
+<p><u>Consent to Use Electronic Records and Signatures</u></p>
+<p>Applicant’s consent to use electronic records and signatures. Applicant agrees that Kapitus may provide any Communications electronically (“Electronic Records”) and to the use of electronic signatures. Applicant’s consent applies to all Communications that may be provided during Applicant’s business relationship with Kapitus. For example, this ESIGN Consent and Disclosure, applications, agreements, and notices or disclosures required to be provided by law or that Kapitus chooses to provide in its discretion. Electronic Records shall be delivered to Applicant by email or other electronic means. Even with Applicant’s consent to Electronic Records, Kapitus may, in its sole discretion, provide any Communication on paper. Applicant acknowledges and agrees that all Electronic Records delivered to Applicant by Kapitus (i) shall be given the same legal effect as signed paper Communications, (ii) shall be considered a “writing” or “in writing” and (iii) shall be deemed for all purposes to have been "signed" and to constitute an "original" when printed from electronic files or records established and maintained in the normal course of business. Any notice Applicant is required to provide to Kapitus by law, agreement, or otherwise must be provided to us on paper, unless we specifically communicate in another Communication that it may be delivered to us electronically.</p>
+<p>Applicant’s option to receive paper copies. Applicant may request a paper copy of an Electronic Record Kapitus provided at no charge to Applicant by contacting us at (800) 780-7133 or support@kapitus.com.</p>
+<p>Changing Applicant’s consent. Applicant may withdraw Applicant’s consent at any time. To withdraw consent, Applicant must contact us at (800) 780-7133 or support@kapitus.com. Applicant’s withdrawal of consent will be effective after Kapitus has a reasonable opportunity to act upon it.</p>
+<p>Maintaining Current Email Information on File. It is Applicant’s responsibility to keep Applicant’s primary email address current so Kapitus can communicate with Applicant electronically. Applicant must promptly contact us at (800) 780-7133 or support@kapitus.com to notify us of any changes to Applicant’s email address on file with Kapitus. If Applicant uses a spam filter or similar software that blocks or re-routes emails from senders not listed in Applicant’s email address book, consider adding Kapitus to the email address book.</p>
+<p>Necessary Hardware and Software Requirements. For access to and retention of Electronic Records, Applicant must have:</p>
+<p>1. A valid email address;<br>2. Sufficient electronic storage capacity;<br>3. An internet browser, with software for viewing documents such as Portable Document Format (PDF);<br>4. Internet connectivity capable of sending, receiving and accessing data, information and communications from us;<br>5. Either a printer, a hard drive, or other storage capabilities.</p>
+<p>If Kapitus’s hardware or software requirements change and that change would create a material risk that Applicant would not be able to access or retain Electronic Records, Kapitus will provide notice of the revised hardware or software requirements and a reminder of Applicant’s right to withdraw consent to Electronic Records.<br>By providing consent, Applicant confirms that Applicant has the hardware and software described above, that Applicant is able to receive and review Electronic Records, and that Applicant has provided a valid email account.<br>Applicant’s Acknowledgment and Confirmation of Consent. By signing below, Applicant acknowledges and agrees, among other things that (1) Applicant affirmatively consents to do business electronically and that Applicant and Kapitus both intend that the Electronic Signatures in Global and National Commerce Act apply to the fullest extent possible to validate our ability to conduct business by electronic means; (3) Applicant can access and read the terms and notices set forth herein; (4) Applicant can print on paper this disclosure or save or send the disclosure to a place where Applicant can print it, for future reference and access; and (3) until or unless Applicant notifies Kapitus per instructions above, Applicant consents to receipt of Communications through electronic means.</p>
+<p><u>Promotions and Servicing Notice</u></p>
+<p>Kapitus may, from time to time, notify Applicant of various promotional offers and other marketing information, or contact Applicant in connection with the servicing of any financing, or in connection with any default under any financing. Applicant expressly consents and authorizes Kapitus to call, e-mail, send text messages, and/or send other electronic messages (including prerecorded or artificial voice messages) using an automatic telephone dialing system to any telephone number provided by Applicant, and any telephone number included in any and all documents or forms submitted, including cellular phone numbers and landlines, regardless of their inclusion on any do not call list, for purposes of servicing, collections, marketing or promoting any product offered by Kapitus. Please note that you are not required to consent to be contacted for marketing or promotional purposes in order to qualify for financing or obtain any other products or services from Kapitus. If you do not agree to be called for marketing or promotional purposes, please call <a href="tel:844-547-9396">(844) 547-9396</a> or email <a href="mailto:DNC@kapitus.com">DNC@kapitus.com</a></p>
+<p>IF YOUR APPLICATION FOR BUSINESS CREDIT IS DENIED, YOU HAVE THE RIGHT TO A WRITTEN STATEMENT OF THE SPECIFIC REASONS FOR THE DENIAL. TO OBTAIN THE STATEMENT, PLEASE CONTACT KAPITUS LLC AT 2500 WILSON BOULEVARD, SUITE 350, ARLINGTON, VIRGINIA 22201 OR (844) 547-9396 WITHIN 60 DAYS FROM THE DATE YOU ARE NOTIFIED OF THE CREDIT DECISION. YOU HAVE THE RIGHT TO OBTAIN A WRITTEN STATEMENT OF REASONS FOR THE DENIAL WITHIN 30 DAYS OF RECEIVING YOUR REQUEST FOR THE STATEMENT.</p>
+<p><em>The notice below applies to applications processed by Kapitus. If the Application is referred to Third-Parties, they may separately contact you or provide information about your rights in the event your application is denied to the extent required by law.</em></p>
+<p>Copyright 2026 • Kapitus • All Rights Reserved. Loans made in California by Strategic Funding Source, Inc. dba Kapitus are issued pursuant to California Finance Lenders License No. 603-G807. By signing below, you agree that you have read and agree to the above terms and notices and our <a href="https://kapitus.com/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a> and our website Terms of Use Agreement (available at <a href="https://kapitus.com" target="_blank" rel="noopener">www.kapitus.com</a>).</p>`;
+
+  builders.terms = function(s, box){
+    box.appendChild(el("p","sub2","Scroll and review all terms to enable the checkbox."));
+    var t = el("div","terms"); t.tabIndex = 0; t.setAttribute("role","region"); t.setAttribute("aria-label","Terms and notices"); t.innerHTML = TERMS_HTML; box.appendChild(t);
+    var scrolled = !!A.termsRead;
+    var lab = el("label","chk"); var cb = document.createElement("input"); cb.type = "checkbox"; cb.disabled = !scrolled; cb.checked = !!A.agreed;
+    lab.appendChild(cb); lab.appendChild(el("span",null,"By checking here, I certify that I have read and agree to the above terms and notices, Kapitus’s Privacy Policy and Terms of Use.")); box.appendChild(lab);
+    var err = el("div","ferr"); err.setAttribute("role","alert"); box.appendChild(err);
+    function check(){ if(!scrolled && t.scrollTop + t.clientHeight >= t.scrollHeight - 24){ scrolled = true; A.termsRead = true; cb.disabled = false; err.textContent = ""; } }
+    t.addEventListener("scroll", check, {passive:true});
+    setTimeout(check, 50);
+    lab.addEventListener("click", function(e){ if(!scrolled){ e.preventDefault(); err.textContent = "Please review the terms before accepting."; t.focus(); } });
+    cb.addEventListener("change", function(){ A.agreed = cb.checked; if(cb.checked) err.textContent = ""; });
+    var x = el("div"); x.appendChild(el("div","sub2","I’m also interested in learning about (optional):"));
+    [["Exclusive savings on business insurance","insurance"],["Personal and business credit reports","reports"]].forEach(function(o){
+      var l2 = el("label","chk"); var c2 = document.createElement("input"); c2.type = "checkbox"; c2.checked = !!A["opt_"+o[1]];
+      c2.addEventListener("change", function(){ A["opt_"+o[1]] = c2.checked; }); l2.appendChild(c2); l2.appendChild(el("span",null,o[0])); x.appendChild(l2);
+    });
+    box.appendChild(x);
+    return {next:function(){
+      if(!scrolled){ err.textContent = "Please review the terms before accepting."; t.focus(); return false; }
+      if(!cb.checked){ err.textContent = "Please check the box to continue."; cb.focus(); return false; }
+      A.agreed = true; return true;
+    }};
+  };
+
+  /* signature (draw or type) + security check + submit */
+  builders.sign = function(s, box){
+    var wrap = el("div","sigbox"); var mode = "draw", dirty = !!A.signature, canvas = document.createElement("canvas"), ctx = null, drawing = false;
+    canvas.className = "sigcanvas"; canvas.setAttribute("aria-label","Signature pad. Draw your signature here, or choose Type instead.");
+    var typed = document.createElement("input"); typed.type = "text"; typed.className = "sigtype"; typed.hidden = true; typed.maxLength = 60; typed.setAttribute("aria-label","Type your full name as your signature"); typed.autocomplete = "off";
+    var lblSig = el("div","sub2","Signature");
+    var tools = el("div","sigtools"); var clr = el("button","tgl","Clear"); clr.type = "button"; var sw = el("button","tgl","Type instead"); sw.type = "button";
+    tools.appendChild(clr); tools.appendChild(sw);
+    wrap.appendChild(lblSig); wrap.appendChild(canvas); wrap.appendChild(typed); wrap.appendChild(tools); box.appendChild(wrap);
+    function fit(){
+      var r = canvas.getBoundingClientRect(); if(!r.width) return; var d = window.devicePixelRatio || 1;
+      canvas.width = Math.round(r.width*d); canvas.height = Math.round(r.height*d); ctx = canvas.getContext("2d");
+      ctx.scale(d,d); ctx.lineWidth = 2.2; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.strokeStyle = "#111";
+    }
+    setTimeout(fit, 0);
+    function pos(e){ var r = canvas.getBoundingClientRect(); return {x:e.clientX - r.left, y:e.clientY - r.top}; }
+    canvas.addEventListener("pointerdown", function(e){ if(!ctx) fit(); drawing = true; var p = pos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); try{ canvas.setPointerCapture(e.pointerId); }catch(x){} e.preventDefault(); });
+    canvas.addEventListener("pointermove", function(e){ if(!drawing) return; var p = pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); dirty = true; err.textContent = ""; });
+    ["pointerup","pointercancel","pointerleave"].forEach(function(ev){ canvas.addEventListener(ev, function(){ drawing = false; }); });
+    clr.addEventListener("click", function(){ if(mode==="draw"){ if(ctx) ctx.clearRect(0,0,canvas.width,canvas.height); dirty = false; } else { typed.value = ""; } });
+    sw.addEventListener("click", function(){
+      mode = mode==="draw" ? "type" : "draw";
+      canvas.hidden = mode==="type"; typed.hidden = mode==="draw"; sw.textContent = mode==="draw" ? "Type instead" : "Draw instead";
+      if(mode==="draw") setTimeout(fit, 0); else typed.focus();
+    });
+    var cap = el("label","captcha"); var cc = document.createElement("input"); cc.type = "checkbox";
+    /* WIRE-UP: replace this block with the real hCaptcha widget (sitekey) when the form is connected. */
+    cap.appendChild(cc); cap.appendChild(el("span",null,"I’m not a robot")); cap.appendChild(el("small",null,"Security check"));
+    box.appendChild(cap);
+    var err = el("div","ferr"); err.setAttribute("role","alert"); box.appendChild(err);
+    return {next:function(){
+      var has = mode==="draw" ? dirty : typed.value.trim().length >= 2;
+      if(!has){ err.textContent = mode==="draw" ? "Please sign in the box, or choose Type instead." : "Please type your full name."; return false; }
+      if(!cc.checked){ err.textContent = "Please complete the security check."; cc.focus(); return false; }
+      A.signatureMode = mode; A.signature = mode==="draw" ? "(drawn)" : typed.value.trim(); return true;
+    }, nextLabel:"Submit"};
+  };
+
+  /* ---------- the 20 screens ---------- */
+  var STEPS = [
+    {id:"amount",   cat:0, build:"amount",    title:"How much funding do you need?"},
+    {id:"uses",     cat:0, build:"multi",     key:"uses", title:"What will this funding help with?", hint:"This helps us match you to the right funding options.", options:USES, other:true},
+    {id:"industry", cat:0, build:"single",    key:"industry", title:"What industry is your business in?", hint:"This helps us better match you with available financing options.", options:INDUSTRY, other:true, auto:true},
+    {id:"entity",   cat:0, build:"single",    key:"entity", title:"What’s your business entity type?", hint:"This helps us identify financing options that fit your business structure.", options:ENTITY, other:true, auto:true, cols:"one"},
+    {id:"start",    cat:0, build:"monthyear", title:"When did you start your business?", hint:"This helps us understand your business maturity level."},
+    {id:"ownership",cat:0, build:"single",    key:"ownership", title:"What percentage of the business do you own?", hint:"This helps determine whether co-owner information is required.", options:OWN, auto:true},
+    {id:"revenue",  cat:0, build:"single",    key:"revenue", title:"What’s your annual revenue?", hint:"We use this to match you with the most relevant financing options.", options:REV, auto:true},
+    {id:"loans",    cat:0, build:"loans",     title:"Do you have any business loans currently?", hint:"This helps us calculate financing amounts."},
+    {id:"bizname",  cat:0, build:"bizname",   title:"What is your business name?", hint:"Your business name stays private and protected."},
+    {id:"bizaddr",  cat:0, build:"address",   prefix:"biz", website:true, title:"What is your business address?", hint:"This is the address where your business receives mail."},
+    {id:"name",     cat:1, build:"fields",    title:"What’s your name?", hint:"Setting up your profile will help speed things along.",
+      fields:[{key:"first",label:"First name",autocomplete:"given-name",validate:vName("first name")},{key:"last",label:"Last name",autocomplete:"family-name",validate:vName("last name")}]},
+    {id:"contact",  cat:1, build:"fields",    title:"What’s your contact information?", hint:"We’ll only contact you with relevant updates.",
+      fields:[{key:"phone",label:"Phone number",type:"tel",inputmode:"tel",autocomplete:"tel",mask:fmtPhone,maxlength:14,placeholder:"(000) 000-0000",validate:vPhone},{key:"email",label:"Email address",type:"email",inputmode:"email",autocomplete:"email",validate:vEmail}]},
+    {id:"dob",      cat:1, build:"dob",       title:"What’s your date of birth?", hint:"We take seriously protecting the privacy of personal information."},
+    {id:"home",     cat:1, build:"address",   prefix:"home", sameAs:true, title:"What’s your home address?", hint:"This is used to verify your identity and assess eligibility."},
+    {id:"credit",   cat:1, build:"single",    key:"credit", title:"What’s your credit score?", hint:"This helps us find the best financing options for you.", options:CREDIT, auto:true},
+    {id:"ssn",      cat:1, build:"ssn",       title:"What’s your Social Security Number?", hint:"Your SSN is encrypted and securely protected.", lock:true},
+    {id:"referral", cat:1, build:"single",    key:"referral", title:"How did you hear about us?", options:REFERRAL, other:true, auto:true, cols:"one"},
+    {id:"docs",     cat:2, build:"upload",    title:"Important documents"},
+    {id:"terms",    cat:2, build:"terms",     title:"Acknowledgement"},
+    {id:"sign",     cat:2, build:"sign",      title:"Signature", last:true}
+  ];
+  var CAP = STEPS.map(function(x){ return x.id; }).indexOf("bizname");   /* progress is only restored up to the first personal screen */
+  if(st.started) idx = Math.min(st.step || 0, CAP);
+  function persist(){ if(st.started) K.set({step:Math.min(idx, CAP), data:safeData()}); }
+
+  /* ---------- rendering ---------- */
+  function swap(){ body.classList.remove("step-in"); void body.offsetWidth; if(!reduce) body.classList.add("step-in"); }
+  function render(focusTitle){
+    clearTimeout(advTimer); ctrl = null; body.innerHTML = ""; swap();
+    if(finished){ return renderThanks(); }
+    if(!formMode && st.started){ return renderResume(); }
+    var s = STEPS[idx];
+    var h = el("h2",null,s.title); h.id = "ftitle"; h.tabIndex = -1; body.appendChild(h);
+    if(s.hint) body.appendChild(hintPill(s.hint, s.lock ? "lock" : "bulb"));
+    var box = el("div","fbox"); body.appendChild(box);
+    ctrl = builders[s.build](s, box) || {};
+    var pct = Math.max(5, Math.round(((idx+1) / STEPS.length) * 100));
+    bar.style.width = pct + "%"; prog.setAttribute("aria-valuenow", String(pct));
+    meta.hidden = !formMode; nav.hidden = !formMode; callEl.hidden = !formMode;
+    if(formMode){
+      catEl.textContent = CATS[s.cat]; cntEl.textContent = "Step " + (idx+1) + " of " + STEPS.length;
+      backBtn.textContent = idx===0 ? "Back to overview" : "Go back";
+      nextBtn.textContent = ctrl.nextLabel || (s.last ? "Submit" : "Continue"); nextBtn.disabled = false;
+      setNext(!ctrl.hideNext);
+      K.track("form_step", {step:s.id, index:idx+1});
+      if(focusTitle){ h.focus({preventScroll:true}); }
+    }
+  }
+  function renderResume(){
+    meta.hidden = true; nav.hidden = true; callEl.hidden = true;
+    var pct = Math.max(5, Math.round(((idx+1) / STEPS.length) * 100)); bar.style.width = pct + "%"; prog.setAttribute("aria-valuenow", String(pct));
+    var h = el("h2",null,"Welcome back"); body.appendChild(h);
+    body.appendChild(el("p","sub","Your $" + K.fmt(A.amount || cfg.defaultAmount) + " request is saved. You’re on " + CATS[STEPS[idx].cat].toLowerCase() + ", step " + (idx+1) + " of " + STEPS.length + "."));
+    var box = el("div","resume");
+    var go = el("button","btn btn-primary"); go.type = "button"; go.setAttribute("data-cta",""); go.dataset.loc = "resume"; go.dataset.start = "Get started"; go.dataset["continue"] = "Continue your application"; go.textContent = "Continue your application";
+    var so = el("button","back","Start over"); so.type = "button";
+    so.addEventListener("click", function(){ resetAll(); render(false); });
+    box.appendChild(go); box.appendChild(so); body.appendChild(box);
+  }
+  function renderThanks(){
+    meta.hidden = true; nav.hidden = true; callEl.hidden = false; bar.style.width = "100%"; prog.setAttribute("aria-valuenow","100");
+    var name = A.legal || A.dba || "";
+    var tick = el("div","tick"); tick.innerHTML = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'; body.appendChild(tick);
+    var h = el("h2",null,"Thank you" + (name ? ", " + name : "")); h.id = "ftitle"; h.tabIndex = -1; body.appendChild(h);
+    body.appendChild(el("p","sub","Your application has been received."));
+    var ul = el("ul","summary");
+    [["Requested amount","$" + K.fmt(A.amount || 0)],["Application status","Received"],["Next step","A financing specialist will contact you shortly"]].forEach(function(r){ var li = el("li"); li.appendChild(el("span",null,r[0])); li.appendChild(el("span",null,r[1])); ul.appendChild(li); });
+    body.appendChild(ul);
+    if(A.email){ body.appendChild(el("p","sub","A confirmation email will be sent to " + A.email + ".")); }
+    if(A.uploadLater){ body.appendChild(el("p","sub","We’ll also email you a secure link to upload your bank statements.")); }
+    if(!F.submitUrl){ body.appendChild(el("p","preview-note","Preview only: nothing was submitted or stored.")); }
+    var done = el("button","btn btn-ghost","Done"); done.type = "button"; done.style.marginTop = "14px"; done.addEventListener("click", function(){ resetAll(); leave(); });
+    body.appendChild(done); h.focus({preventScroll:true});
+  }
+
+  /* ---------- navigation ---------- */
+  function next(){
+    if(!ctrl) return;
+    if(ctrl.next && !ctrl.next()) return;
+    var s = STEPS[idx];
+    if(s.last){ return finish(); }
+    idx++; persist(); render(true); toTop();
+  }
+  function prev(){
+    if(idx===0){ exitForm(); return; }
+    idx--; persist(); K.track("form_back", {step:STEPS[idx].id}); render(true); toTop();
+  }
+  function toTop(){ var r = card.getBoundingClientRect(); if(r.top < 0 || r.top > 120){ window.scrollTo({top: Math.max(0, window.scrollY + r.top - 70), behavior: "auto"}); } }
+  nextBtn.addEventListener("click", next);
+  backBtn.addEventListener("click", prev);
+  card.addEventListener("keydown", function(e){
+    if(e.key!=="Enter" || !formMode) return;
+    var t = e.target; if(!t || t.tagName!=="INPUT" || t.type==="checkbox" || t.type==="file") return;
+    if(t.id==="amount") return; e.preventDefault(); next();
+  });
+
+  function buildPayload(){
+    var p = {}; Object.keys(A).forEach(function(k){ if(k==="files") p.files = A.files.map(function(f){ return {name:f.name, size:f.size}; }); else if(k!=="signature") p[k] = A[k]; });
+    p.signature = A.signatureMode; return p;
+  }
+  function finish(){
+    var payload = buildPayload();
+    K.track("form_submit", {amount:A.amount});
+    function ok(){ finished = true; K.clear(); if(typeof K.onSubmit==="function") K.onSubmit(payload); render(true); }
+    if(F.submitUrl){
+      nextBtn.disabled = true;
+      fetch(F.submitUrl, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload)})
+        .then(function(r){ if(!r.ok) throw new Error("bad status"); ok(); })
+        .catch(function(){ nextBtn.disabled = false; var m = el("div","ferr","We couldn’t submit your application. Please try again, or call " + cfg.phoneSales + "."); m.setAttribute("role","alert"); body.appendChild(m); });
+    } else { ok(); }
+  }
+  function resetAll(){ A = {}; finished = false; idx = 0; K.clear(); }
+
+  /* ---------- focus mode ---------- */
+  function enter(){
+    formMode = true; document.body.classList.add("form-mode");
+    if(location.hash !== "#application") location.hash = "application";
+    window.scrollTo(0,0); render(true);
+  }
+  function leave(){
+    formMode = false; document.body.classList.remove("form-mode");
+    if(finished){ finished = false; }
+    render(false); window.scrollTo(0,0);
+  }
+  function exitForm(){
+    if(location.hash === "#application"){ leaving = true; location.hash = ""; }
+    leave();
+  }
+  window.addEventListener("hashchange", function(){
+    if(leaving){ leaving = false; return; }
+    if(formMode && location.hash !== "#application"){ leave(); }
+    else if(!formMode && location.hash === "#application"){ enter(); }
+  });
+  K.openForm = function(){ if(!formMode){ if(!st.started) idx = 0; enter(); } };
+
+  /* first paint: intro (amount) or the "welcome back" card; open straight into the form if the URL says so */
+  render(false);
+  if(location.hash === "#application"){ enter(); }
+})();
+</script>
+
 </body>
 </html>
