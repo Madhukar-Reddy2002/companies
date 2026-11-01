@@ -28,6 +28,16 @@
   --foot-bg:linear-gradient(135deg,#502566 0%,#3C1B50 50%,#642587 100%); --foot-solid:var(--p900); --foot-fg:rgba(255,255,255,.8); --foot-head:#fff;
   --foot-link:rgba(255,255,255,.82); --foot-line:rgba(255,255,255,.16); --foot-legal:rgba(255,255,255,.7); --foot-ring:rgba(255,255,255,.35); --foot-hover:rgba(255,255,255,.14);
 }
+:root[data-theme="purple"]{
+  color-scheme:dark;
+  --bg:#1a0a24; --surface:#251233; --surface2:#2e1a40; --lav:#3a2152;
+  --text:#f4eefa; --muted:#b9acca; --border:#4a3562; --chip-border:#66507f;
+  --accent-ink:#d58cff; --ok:#5fd3a5; --ok-bg:#12382a; --amber:#ffc26b; --amber-bg:#3d2a0c;
+  --shadow:0 14px 40px rgba(0,0,0,.45);
+}
+:root[data-theme="purple"] .ff select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23b9acca' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+}
 :root[data-theme="light"]{
   --hdr-bg:#ffffff; --hdr-fg:#2a1139; --hdr-line:#e3dde9; --hdr-ring:#cfc7d8; --hdr-hover:#f1e6f8;
   --hero-bg:linear-gradient(135deg,#F7F0FB 0%,#ffffff 55%,#EFE0F8 100%); --hero-fg:#2a1139; --hero-num:#642587; --hero-muted:#4a3a57; --hero-soft:#5d5866;
