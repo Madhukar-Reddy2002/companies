@@ -544,3 +544,59 @@ body.form-mode .legal{border-top:0;padding-top:20px}
 .nexts span{display:block;margin-top:2px;color:var(--muted);font-size:14px;line-height:1.45}
 .thanks-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
 .card .thanks-actions .btn{width:auto;flex:1 1 200px}
+
+/* =========================================
+   KAPITUS BRAND LOGO
+========================================= */
+
+.brand-logo {
+  display: block;
+  width: 165px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* =========================================
+   WHY KAPITUS - RESPONSIVE 3D IMAGE
+========================================= */
+
+#why .why-media {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  overflow: visible;
+}
+
+#why .why-media picture {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
+#why .why-hero-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Mobile layout */
+
+@media (max-width: 700px) {
+  #why .why-media {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  #why .why-media picture {
+    width: 100%;
+  }
+
+  #why .why-hero-image {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+}
