@@ -167,6 +167,24 @@ h2.title{font-size:clamp(22px,2.6vw,30px);line-height:1.15;letter-spacing:-.025e
 }
 
 
+/* Kapitus logo theme switching */
+
+html[data-theme="purple"] .brand .logo-white {
+  display: block !important;
+}
+
+html[data-theme="purple"] .brand .logo-purple {
+  display: none !important;
+}
+
+html[data-theme="light"] .brand .logo-white {
+  display: none !important;
+}
+
+html[data-theme="light"] .brand .logo-purple {
+  display: block !important;
+}
+
 /* ============ 02b OFFER STRIP ============ */
 .offers{padding:0;background:var(--offers-bg);color:var(--offers-fg)}
 .offers-grid{display:grid;grid-template-columns:repeat(3,1fr)}
