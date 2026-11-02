@@ -197,7 +197,21 @@ html[data-theme="light"] .brand .logo-purple {
   .o-pre{font-size:11px;line-height:1.25}
   .offer strong{font-size:18px}
 }
+.google-rating {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  font-size: 14px;
+}
 
+.google-rating strong {
+  white-space: nowrap;
+}
+
+.google-rating .stars {
+  color: #fbbc04;
+}
 /* ============ 03 WHY KAPITUS ============ */
 .why-grid{display:grid;grid-template-columns:.8fr 1.2fr;border-radius:18px;overflow:hidden;border:1.5px solid var(--border);background:var(--surface)}
 /* Image slot: add an <img> as the first child of .why-media (see HTML comment). Without an image the gradient + stat stands on its own. */
