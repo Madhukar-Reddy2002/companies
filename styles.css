@@ -501,3 +501,12 @@ body.form-mode .legal{border-top:0;padding-top:20px}
 @media (min-width:900px){.nudge{right:24px;bottom:24px;transform:translateY(14px)}.nudge.show{transform:none}}
 @media (max-width:899px){.nudge{left:50%;top:calc(env(safe-area-inset-top,0px) + 8px);transform:translate(-50%,-14px)}.nudge.show{transform:translate(-50%,0)}}
 @media (prefers-reduced-motion: reduce){.nudge.run .nbar{animation:none}}
+/* Disclaimer: full-width footnote under FAQ + Ask */
+.qa .disclaimer{
+  max-width:none;
+  margin:28px 0 0;
+  padding-top:18px;
+  border-top:1px solid var(--border);
+  font-size:12.5px;
+  line-height:1.6;
+}
