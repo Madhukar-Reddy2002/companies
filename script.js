@@ -185,8 +185,11 @@ window.KAP = (function(){
   update();
 })();
 
-/* ============ 05 REVIEWS: carousel (autoplay pauses on hover, focus, touch and with the pause button) ============
-   EDIT HERE: the REVIEWS list. alt:true gives a card the dark purple style. */
+/* ============ 05 REVIEWS: looping carousel with reviewer avatars ============
+   EDIT HERE: the REVIEWS list. t = text, n = name, s = source label, alt:true = dark purple card,
+   p = optional photo URL. Add a photo ONLY with the reviewer's written consent. Without p (or if the image fails
+   to load) the card shows a coloured initials avatar. The loop drifts slowly and pauses on hover, focus, touch,
+   after any manual navigation and with the pause button. */
 (function(){
   var K = window.KAP, $ = K.$, $$ = K.$$, el = K.el;
   var track = $("#carTrack"); if(!track) return;
@@ -198,47 +201,118 @@ window.KAP = (function(){
     {t:"Great Company, Great People!", n:"Sean Lowery", s:"Google review"},
     {t:"Excellent service! great platform and customer services 5 stars", n:"Joan Efres Nazario", s:"Google review"}
   ];
+  var N = REVIEWS.length, COPIES = 3, SPEED = 34;          /* SPEED = px per second of the slow drift */
+  var PALETTE = [[268,52],[292,46],[222,56],[190,62],[332,50]];   /* hue, saturation for initials avatars */
   var dotsEl = $("#dots"), pauseBtn = $("#carPause"), carEl = $("#car"), reduce = K.reduce;
+
+  function initials(n){
+    var w = n.replace(/\./g,"").trim().split(/\s+/);
+    return (w[0].charAt(0) + (w.length > 1 ? w[w.length-1].charAt(0) : "")).toUpperCase();
+  }
+  function tone(n){ var h = 0, i; for(i = 0; i < n.length; i++) h = (h*31 + n.charCodeAt(i)) >>> 0; return PALETTE[h % PALETTE.length]; }
+  function avatar(r){
+    var a = el("div","av"), p = tone(r.n);
+    a.style.background = "hsl(" + p[0] + " " + p[1] + "% 36%)";
+    a.setAttribute("aria-hidden","true");
+    a.appendChild(el("span",null,initials(r.n)));
+    if(r.p){
+      var im = document.createElement("img");
+      im.alt = ""; im.width = 46; im.height = 46; im.loading = "lazy"; im.decoding = "async";
+      im.addEventListener("error", function(){ im.remove(); });   /* falls back to the initials */
+      im.src = r.p; a.appendChild(im);
+    }
+    if(/google/i.test(r.s)) a.appendChild(el("span","gb","G"));
+    return a;
+  }
+  function card(r, i, real){
+    var c = el("figure","rcard" + (r.alt ? " alt" : ""));
+    if(real){ c.setAttribute("role","group"); c.setAttribute("aria-label",(i+1) + " of " + N); }
+    else { c.setAttribute("aria-hidden","true"); }          /* the two extra copies exist only for the endless loop */
+    var st = el("div","stars","★★★★★"); st.setAttribute("aria-label","5 stars");
+    var foot = el("figcaption","rfoot"), who = el("div");
+    who.appendChild(el("div","who",r.n)); who.appendChild(el("div","src",r.s));
+    foot.appendChild(avatar(r)); foot.appendChild(who);
+    c.appendChild(st); c.appendChild(el("blockquote",null,r.t)); c.appendChild(foot);
+    return c;
+  }
+  var c0, d;
+  for(c0 = 0; c0 < COPIES; c0++){ REVIEWS.forEach(function(r,i){ track.appendChild(card(r,i,c0 === 1)); }); }
   REVIEWS.forEach(function(r,i){
-    var c = el("figure","rcard" + (r.alt?" alt":""));
-    c.setAttribute("role","group"); c.setAttribute("aria-label",(i+1)+" of "+REVIEWS.length);
-    var st = el("div","stars","\u2605\u2605\u2605\u2605\u2605"); st.setAttribute("aria-label","5 stars");
-    var w = el("div"); w.appendChild(el("div","who",r.n)); w.appendChild(el("div","src",r.s));
-    c.appendChild(st); c.appendChild(el("blockquote",null,r.t)); c.appendChild(w); track.appendChild(c);
-    var d = el("button"); d.type = "button"; d.setAttribute("aria-label","Go to review "+(i+1));
+    d = el("button"); d.type = "button"; d.setAttribute("aria-label","Go to review " + (i+1));
     d.addEventListener("click", function(){ go(i); hold(); });
     dotsEl.appendChild(d);
   });
-  function gapPx(){ var cs = getComputedStyle(track); return parseFloat(cs.columnGap || cs.gap) || 20; }
-  function stepPx(){ return track.children[0].getBoundingClientRect().width + gapPx(); }
-  function maxScroll(){ return track.scrollWidth - track.clientWidth; }
-  function curIdx(){ return Math.min(REVIEWS.length-1, Math.round(track.scrollLeft / stepPx())); }
-  function go(i){
-    i = Math.max(0, Math.min(REVIEWS.length-1, i));
-    track.scrollTo({left: Math.min(i*stepPx(), maxScroll()), behavior: reduce ? "auto" : "smooth"});
-  }
-  function next(){ if(track.scrollLeft >= maxScroll()-4){ go(0); } else { go(curIdx()+1); } }
-  function prev(){ if(track.scrollLeft <= 4){ track.scrollTo({left:maxScroll(), behavior: reduce?"auto":"smooth"}); } else { go(curIdx()-1); } }
-  function paintDots(){
-    var i = (track.scrollLeft >= maxScroll()-4) ? REVIEWS.length-1 : curIdx();
-    $$("button", dotsEl).forEach(function(d,k){ d.setAttribute("aria-current", String(k===i)); });
-  }
-  var raf = 0;
-  track.addEventListener("scroll", function(){ cancelAnimationFrame(raf); raf = requestAnimationFrame(paintDots); }, {passive:true});
-  $("#carNext").addEventListener("click", function(){ next(); hold(); K.track("review_nav",{dir:"next"}); });
-  $("#carPrev").addEventListener("click", function(){ prev(); hold(); K.track("review_nav",{dir:"prev"}); });
-  track.addEventListener("keydown", function(e){ if(e.key==="ArrowRight"){ next(); e.preventDefault(); } if(e.key==="ArrowLeft"){ prev(); e.preventDefault(); } });
 
-  var timer=null, hover=false, focused=false, held=false, userPaused=false, visible=false, holdT=null;
-  function stop(){ if(timer){ clearInterval(timer); timer=null; } }
-  function sync(){ stop(); if(reduce || userPaused || hover || focused || held || !visible || document.hidden) return; timer = setInterval(next, 3800); }
-  function hold(){ held = true; sync(); clearTimeout(holdT); holdT = setTimeout(function(){ held=false; sync(); }, 8000); }
-  carEl.addEventListener("mouseenter", function(){ hover=true; sync(); });
-  carEl.addEventListener("mouseleave", function(){ hover=false; sync(); });
-  carEl.addEventListener("focusin", function(){ focused=true; sync(); });
-  carEl.addEventListener("focusout", function(){ focused=false; sync(); });
-  track.addEventListener("touchstart", function(){ held=true; sync(); clearTimeout(holdT); }, {passive:true});
-  track.addEventListener("touchend", function(){ clearTimeout(holdT); holdT = setTimeout(function(){ held=false; sync(); }, 6000); }, {passive:true});
+  /* ---- geometry (fractional, from real layout) ---- */
+  function kids(){ return track.children; }
+  function stepPx(){ var k = kids(); return k[1].getBoundingClientRect().left - k[0].getBoundingClientRect().left; }
+  function setW(){ var k = kids(); return k[N].getBoundingClientRect().left - k[0].getBoundingClientRect().left; }
+  function cardIdx(){ var s = stepPx(); return s > 0 ? Math.round(track.scrollLeft / s) : 0; }
+  function curIdx(){ return ((cardIdx() % N) + N) % N; }
+
+  /* ---- endless loop: the middle copy is home. Whenever we rest anywhere else, jump by one set (identical content, so invisible) ---- */
+  var lastW = 0;
+  function wrapIdle(){
+    var W = setW(); if(!(W > 0)) return;
+    var x = track.scrollLeft;
+    if(x >= 2*W) track.scrollLeft = x - W; else if(x < W) track.scrollLeft = x + W;
+  }
+  function layout(){
+    var W = setW(); if(!(W > 0)) return;
+    track.scrollLeft = lastW ? (track.scrollLeft / lastW) * W : W;
+    lastW = W; pos = track.scrollLeft; paintDots();
+  }
+
+  /* ---- navigation (shortest way round the loop) ---- */
+  function scrollToCard(k){ track.scrollTo({left: k * stepPx(), behavior: reduce ? "auto" : "smooth"}); }
+  function nudge(dir){ scrollToCard(cardIdx() + dir); }
+  function go(i){
+    var k = cardIdx(), dlt = i - curIdx();
+    if(dlt > N/2) dlt -= N; else if(dlt < -N/2) dlt += N;
+    scrollToCard(k + dlt);
+  }
+  function paintDots(){
+    var i = curIdx();
+    $$("button", dotsEl).forEach(function(b,k){ b.setAttribute("aria-current", String(k === i)); });
+  }
+  var raf = 0, idleT = null, drifting = false;
+  track.addEventListener("scroll", function(){
+    cancelAnimationFrame(raf); raf = requestAnimationFrame(paintDots);
+    if(drifting) return;
+    clearTimeout(idleT); idleT = setTimeout(wrapIdle, 140);
+  }, {passive:true});
+  $("#carNext").addEventListener("click", function(){ nudge(1); hold(); K.track("review_nav",{dir:"next"}); });
+  $("#carPrev").addEventListener("click", function(){ nudge(-1); hold(); K.track("review_nav",{dir:"prev"}); });
+  track.addEventListener("keydown", function(e){
+    if(e.key === "ArrowRight"){ nudge(1); hold(); e.preventDefault(); }
+    if(e.key === "ArrowLeft"){ nudge(-1); hold(); e.preventDefault(); }
+  });
+
+  /* ---- slow continuous drift (requestAnimationFrame) ---- */
+  var pos = 0, lastT = 0, dRaf = 0;
+  function frame(t){
+    if(!drifting) return;
+    var dt = Math.min(64, t - lastT) / 1000; lastT = t;
+    pos += SPEED * dt;
+    var W = setW(); if(W > 0 && pos >= 2*W) pos -= W;
+    track.scrollLeft = pos;
+    dRaf = requestAnimationFrame(frame);
+  }
+  function startDrift(){ if(drifting) return; drifting = true; wrapIdle(); pos = track.scrollLeft; lastT = performance.now(); dRaf = requestAnimationFrame(frame); }
+  function stopDrift(){ drifting = false; cancelAnimationFrame(dRaf); }
+
+  var hover = false, focused = false, held = false, userPaused = false, visible = false, holdT = null;
+  function sync(){
+    if(reduce || userPaused || hover || focused || held || !visible || document.hidden) stopDrift(); else startDrift();
+  }
+  function hold(){ held = true; sync(); clearTimeout(holdT); holdT = setTimeout(function(){ held = false; sync(); }, 8000); }
+  carEl.addEventListener("mouseenter", function(){ hover = true; sync(); });
+  carEl.addEventListener("mouseleave", function(){ hover = false; sync(); });
+  carEl.addEventListener("focusin", function(){ focused = true; sync(); });
+  carEl.addEventListener("focusout", function(){ focused = false; sync(); });
+  track.addEventListener("touchstart", function(){ held = true; sync(); clearTimeout(holdT); }, {passive:true});
+  track.addEventListener("touchend", function(){ clearTimeout(holdT); holdT = setTimeout(function(){ held = false; sync(); }, 6000); }, {passive:true});
+  track.addEventListener("wheel", function(e){ if(Math.abs(e.deltaX) > Math.abs(e.deltaY)) hold(); }, {passive:true});
   document.addEventListener("visibilitychange", sync);
   pauseBtn.addEventListener("click", function(){
     userPaused = !userPaused;
@@ -251,7 +325,9 @@ window.KAP = (function(){
     new IntersectionObserver(function(en){ visible = en[0].isIntersecting; sync(); },{threshold:0.35}).observe(carEl);
   } else { visible = true; sync(); }
   if(reduce){ pauseBtn.hidden = true; }
-  paintDots();
+  if("ResizeObserver" in window){ new ResizeObserver(layout).observe(track); } else { window.addEventListener("resize", layout); }
+  window.addEventListener("load", layout);
+  layout();
 })();
 
 /* ============ 06 QUESTIONS (a): ASK BOX knowledge base ============
