@@ -20,7 +20,9 @@ window.KAP = (function(){
       maxFileMB: 10,           /* per bank statement. Must match the real upload limit on the server */
       minFiles: 1,             /* statements needed to continue (3 expected, 4 in CA and NY) */
       allowUploadLater: true,  /* "email me a link to upload later" option on the documents screen */
-      submitUrl: ""            /* WIRE-UP: endpoint that receives the finished application (JSON). Empty = preview only */
+      submitUrl: "",           /* WIRE-UP: endpoint that receives the finished application (JSON). Empty = preview only */
+      savePersonal: true,      /* remember first and last name, phone, email and business street in this browser (resumeDays) so nobody retypes them. false = business answers only */
+      zipLookupUrl: "https://api.zippopotam.us/us/"   /* ZIP > city and state. Only the 5-digit ZIP is sent. "" turns the lookup off */
     }
   };
   var reduce = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
@@ -36,8 +38,8 @@ window.KAP = (function(){
     try{ (window.dataLayer = window.dataLayer || []).push(Object.assign({event:"blhp_" + name}, data || {})); }catch(e){}
   }
 
-  /* progress state. Only non-personal answers (amount, use of funds, industry, ...) and the step are kept,
-     in this browser only. Names, contact details, DOB, SSN, EIN, addresses and files are never stored. */
+  /* progress state, kept in this browser only for resumeDays. Business answers, plus (cfg.form.savePersonal) first and last name,
+     phone, email and business street. SSN, date of birth, EIN, home address, credit score, files and signature are NEVER stored. */
   var state = {started:false, step:0, data:{}, resumed:false};
   function store(){ try{ return window.localStorage; }catch(e){ return null; } }
   function load(){
@@ -591,7 +593,8 @@ var KB = [
    Follows the live /simple/ form (same questions, options, helper text and rules). Co-owner screens are skipped for now.
    Order: Business details (10) > Profile information (7) > Documents (3).
    EDIT HERE: STEPS (order, copy, options), the validators, TERMS_HTML. Options for the form live in cfg.form (section 00).
-   PRIVACY: personal answers stay in memory only. Nothing is stored or sent unless cfg.form.submitUrl is set. */
+   PRIVACY: see KEEP below for the only answers remembered in this browser. SSN, DOB, EIN, home address, files and signature stay in memory only.
+   Nothing is submitted unless cfg.form.submitUrl is set. */
 (function(){
   var K = window.KAP, $ = K.$, $$ = K.$$, el = K.el, cfg = K.cfg, F = cfg.form, st = K.state;
   var card = $("#card"); if(!card) return;
@@ -599,9 +602,12 @@ var KB = [
       nav=$("#fnav"), backBtn=$("#fback"), nextBtn=$("#fnext"), closeBtn=$("#fclose");
   var reduce = K.reduce, formMode = false, finished = false, idx = 0, ctrl = null, leaving = false, advTimer = null;
   var A = {};                                   /* all answers (personal ones never leave memory) */
-  var SAFE = ["amount","uses","usesOther","industry","industryOther","entity","entityOther","startMonth","startYear","ownership","revenue","loans","loanBalance"];
-  SAFE.forEach(function(k){ if(st.data && st.data[k]!=null) A[k] = st.data[k]; });
-  function safeData(){ var o = {}; SAFE.forEach(function(k){ if(A[k]!=null) o[k] = A[k]; }); return o; }
+  /* ONLY these are remembered in this browser. NEVER add: SSN, date of birth, EIN, home address, credit score, files, signature. */
+  var SAFE = ["amount","uses","usesOther","industry","industryOther","entity","entityOther","startMonth","startYear","ownership","revenue","loans","loanBalance","lender","dba","legal","multi","bizCity","bizState","bizZip","bizWeb"];
+  var PERSONAL = ["first","last","phone","email","bizStreet"];   /* switched off by cfg.form.savePersonal = false */
+  var KEEP = F.savePersonal ? SAFE.concat(PERSONAL) : SAFE;
+  KEEP.forEach(function(k){ if(st.data && st.data[k]!=null) A[k] = st.data[k]; });
+  function safeData(){ var o = {}; KEEP.forEach(function(k){ if(A[k]!=null) o[k] = A[k]; }); return o; }
 
   /* ---------- options (from the /simple/ form) ---------- */
   var CATS = ["Business details","Profile information","Documents"];
@@ -686,6 +692,10 @@ var KB = [
     return ok;
   }
   function setNext(show){ nextBtn.hidden = !show; }
+  function nice(n){   /* "karen" or "KAREN" > "Karen"; mixed case such as "McDonald" is left alone */
+    n = String(n || "").trim();
+    return (n === n.toLowerCase() || n === n.toUpperCase()) ? n.toLowerCase().replace(/(^|[\s-])([a-z])/g, function(m,a,b){ return a + b.toUpperCase(); }) : n;
+  }
 
   /* ---------- screen builders: each returns {next(): validate + save, hideNext?} ---------- */
   var builders = {};
@@ -831,21 +841,26 @@ var KB = [
   };
 
   builders.bizname = function(s, box){
-    var dba = field({key:"dba", label:"DBA (business name)", autocomplete:"organization", value:A.dba, validate:vText("Please enter your business name.")});
-    var legal = field({key:"legal", label:"Legal business name", autocomplete:"organization", value:A.legal, validate:vText("Please enter your legal business name.")});
-    var ein = field({key:"ein", label:"EIN / Tax ID", inputmode:"numeric", maxlength:10, mask:fmtEIN, value:A.ein, placeholder:"00-0000000",
-      help:"This is your business’s Tax ID. You can find it on your latest business tax return. We use this information to verify your business.", validate:vEIN});
-    box.appendChild(dba.wrap); box.appendChild(legal.wrap); box.appendChild(ein.wrap);
-    var q = el("div"); q.appendChild(el("div","sub2","Do you own multiple locations or businesses?"));
-    var grid = el("div","opts two"); var mv = A.multi || ""; var chips = [];
-    ["Yes","No"].forEach(function(x){ var b = el("button","chip",x); b.type = "button"; b.setAttribute("aria-pressed", String(mv===x)); b.addEventListener("click", function(){ mv = x; chips.forEach(function(c){ c.setAttribute("aria-pressed", String(c.textContent===x)); }); err.textContent = ""; }); chips.push(b); grid.appendChild(b); });
-    var err = el("div","ferr"); q.appendChild(grid); q.appendChild(err); box.appendChild(q);
+    var dba = field({key:"dba", label:"DBA (business name)", autocomplete:"organization", value:A.dba,
+      help:"DBA means “doing business as”. It’s the name your customers know you by. If it’s the same as your legal name, enter it again.", validate:vText("Please enter your business name.")});
+    var legal = field({key:"legal", label:"Legal business name", autocomplete:"organization", value:A.legal,
+      help:"The name your business is registered under. It’s on your tax return and business license.", validate:vText("Please enter your legal business name.")});
+    box.appendChild(dba.wrap); box.appendChild(legal.wrap);
     return {next:function(){
-      var ok = validateAll([dba,legal,ein], s.id);
-      if(!mv){ err.textContent = "Please select an option."; ok = false; }
-      if(!ok) return false;
-      A.dba = dba.get(); A.legal = legal.get(); A.ein = ein.get(); A.multi = mv; return true;
+      if(!validateAll([dba,legal], s.id)) return false;
+      A.dba = dba.get(); A.legal = legal.get(); return true;
     }};
+  };
+
+  builders.ein = function(s, box){
+    var ein = field({key:"ein", label:"EIN / Tax ID", inputmode:"numeric", maxlength:10, mask:fmtEIN, value:A.ein, placeholder:"00-0000000",
+      help:"EIN stands for Employer Identification Number. It’s also called your Tax ID, and it has 9 digits. We use it to verify your business.", validate:vEIN});
+    box.appendChild(ein.wrap);
+    var d = el("details","finder"); d.appendChild(el("summary",null,"Where do I find my EIN?"));
+    var ul = el("ul");
+    ["Your latest business tax return.","The IRS letter you received when you registered your business (CP 575 or 147C).","Some banks print it on business statements or account paperwork, usually near the business name at the top."].forEach(function(t){ ul.appendChild(el("li",null,t)); });
+    d.appendChild(ul); box.appendChild(d);
+    return {next:function(){ if(!validateAll([ein], s.id)) return false; A.ein = ein.get(); return true; }};
   };
 
   builders.address = function(s, box){
@@ -855,14 +870,52 @@ var KB = [
       var lab = el("label","chk"); same = document.createElement("input"); same.type = "checkbox"; same.checked = !!A.homeSame;
       lab.appendChild(same); lab.appendChild(el("span",null,"Same as business address")); box.appendChild(lab);
     }
-    fs.street = field({key:p+"Street", label:"Street address", autocomplete:"address-line1", value:A[p+"Street"], validate:vStreet});
+    /* order: ZIP first. City and state fill themselves from the ZIP and stay editable, so only ZIP and street are typed. */
+    fs.zip = field({key:p+"Zip", label:"ZIP code", inputmode:"numeric", maxlength:5, mask:function(d){ return d.slice(0,5); }, autocomplete:"postal-code", value:A[p+"Zip"], validate:vZip});
     fs.city = field({key:p+"City", label:"City", autocomplete:"address-level2", value:A[p+"City"], validate:vCity});
     fs.state = field({key:p+"State", label:"State", options:opt(STATES), placeholder:"Select state", autocomplete:"address-level1", value:A[p+"State"], validate:vState});
-    fs.zip = field({key:p+"Zip", label:"ZIP code", inputmode:"numeric", maxlength:5, mask:function(d){ return d.slice(0,5); }, autocomplete:"postal-code", value:A[p+"Zip"], validate:vZip});
+    fs.street = field({key:p+"Street", label:"Street address", autocomplete:"address-line1", value:A[p+"Street"], validate:vStreet});
+    var zst = el("div","ft"); zst.setAttribute("aria-live","polite"); fs.zip.wrap.appendChild(zst);
+    box.appendChild(fs.zip.wrap);
+    var row = el("div","row2"); row.appendChild(fs.city.wrap); row.appendChild(fs.state.wrap); box.appendChild(row);
     box.appendChild(fs.street.wrap);
-    var row = el("div","row3"); row.appendChild(fs.city.wrap); row.appendChild(fs.state.wrap); row.appendChild(fs.zip.wrap); box.appendChild(row);
     var web = null;
     if(s.website){ web = field({key:"bizWeb", label:"Website (optional)", inputmode:"url", autocomplete:"url", value:A.bizWeb, validate:vWeb}); box.appendChild(web.wrap); }
+
+    var touched = {city:false, state:false}, lastZip = "", ac = null;
+    fs.city.el.addEventListener("input", function(){ touched.city = true; });
+    fs.state.el.addEventListener("change", function(){ touched.state = true; });
+    function stateName(n){ var i; n = String(n || "").toLowerCase(); for(i = 0; i < STATES.length; i++){ if(STATES[i].toLowerCase() === n) return STATES[i]; } return ""; }
+    function fillFrom(z, res){
+      [["city",res.city],["state",res.state]].forEach(function(x){
+        var k = x[0], v = x[1], cur = k==="state" ? fs.state.el.value : fs.city.get();
+        if(v && (!cur || !touched[k] || (lastZip && lastZip !== z))){ fs[k].set(v); fs[k].show(""); touched[k] = false; }
+      });
+      lastZip = z;
+      zst.textContent = "City and state filled in from your ZIP. You can edit them.";
+      if(document.activeElement === fs.zip.el && !fs.street.get()){ fs.street.el.focus(); }   /* next thing to type is the street */
+      K.track("zip_lookup", {ok:true});
+    }
+    function lookup(z){
+      if(!F.zipLookupUrl || !window.fetch) return;
+      if(ac){ try{ ac.abort(); }catch(e){} }
+      ac = window.AbortController ? new AbortController() : null;
+      var t = setTimeout(function(){ if(ac){ try{ ac.abort(); }catch(e){} } }, 4000);
+      zst.textContent = "Looking up your ZIP...";
+      fetch(F.zipLookupUrl + z, ac ? {signal:ac.signal} : {})
+        .then(function(r){ if(!r.ok) throw new Error("none"); return r.json(); })
+        .then(function(j){
+          var pl = j && j.places && j.places[0]; if(!pl) throw new Error("none");
+          if(fs.zip.get() === z) fillFrom(z, {city:pl["place name"], state:stateName(pl["state"])});
+        })
+        .catch(function(){ if(fs.zip.get() === z){ zst.textContent = "We couldn’t find that ZIP. Please enter your city and state."; K.track("zip_lookup", {ok:false}); } })
+        .then(function(){ clearTimeout(t); });
+    }
+    fs.zip.el.addEventListener("input", function(){
+      var z = K.digits(fs.zip.el.value);
+      if(z.length === 5) lookup(z); else { zst.textContent = ""; if(ac){ try{ ac.abort(); }catch(e){} } }
+    });
+
     function lock(on){
       ["street","city","state","zip"].forEach(function(k){
         var f = fs[k], map = {street:"bizStreet",city:"bizCity",state:"bizState",zip:"bizZip"};
@@ -870,10 +923,11 @@ var KB = [
         if(k==="state") f.el.disabled = on; else f.el.readOnly = on;
         f.show("");
       });
+      zst.textContent = "";
     }
-    if(same){ lock(same.checked); same.addEventListener("change", function(){ lock(same.checked); if(!same.checked){ ["street","city","state","zip"].forEach(function(k){ fs[k].set(""); }); } }); }
+    if(same){ lock(same.checked); same.addEventListener("change", function(){ lock(same.checked); if(!same.checked){ ["street","city","state","zip"].forEach(function(k){ fs[k].set(""); }); touched = {city:false, state:false}; lastZip = ""; } }); }
     return {next:function(){
-      var list = [fs.street,fs.city,fs.state,fs.zip]; if(web) list.push(web);
+      var list = [fs.zip,fs.city,fs.state,fs.street]; if(web) list.push(web);
       if(!validateAll(list, s.id)) return false;
       A[p+"Street"] = fs.street.get(); A[p+"City"] = fs.city.get(); A[p+"State"] = fs.state.el.value; A[p+"Zip"] = fs.zip.get();
       if(web) A.bizWeb = web.get(); if(same) A.homeSame = same.checked;
@@ -886,6 +940,7 @@ var KB = [
     var list = s.fields.map(function(d){ var o = Object.assign({}, d); o.value = A[d.key]; return field(o); });
     var grid = el(list.length===2 ? "row2" : "fbox");
     list.forEach(function(f){ grid.appendChild(f.wrap); }); box.appendChild(grid);
+    if(s.note) box.appendChild(el("p","ft",s.note));
     return {next:function(){ if(!validateAll(list, s.id)) return false; list.forEach(function(f, i){ A[s.fields[i].key] = f.get(); }); return true; }};
   };
 
@@ -1073,8 +1128,11 @@ var KB = [
     {id:"revenue",  cat:0, build:"single",    key:"revenue", title:"What’s your annual revenue?", hint:"We use this to match you with the most relevant financing options.", options:REV, auto:true},
     {id:"loans",    cat:0, build:"loans",     title:"Do you have any business loans currently?", hint:"This helps us calculate financing amounts."},
     {id:"bizname",  cat:0, build:"bizname",   title:"What is your business name?", hint:"Your business name stays private and protected."},
+    {id:"ein",      cat:0, build:"ein",       title:"What’s your business’s EIN?", hint:"Your EIN is also called your Tax ID."},
+    {id:"locations",cat:0, build:"single",    key:"multi", title:"Do you own multiple locations or businesses?", options:["Yes","No"], auto:true, cols:"two"},
     {id:"bizaddr",  cat:0, build:"address",   prefix:"biz", website:true, title:"What is your business address?", hint:"This is the address where your business receives mail."},
     {id:"name",     cat:1, build:"fields",    title:"What’s your name?", hint:"Setting up your profile will help speed things along.",
+      note: F.savePersonal ? "We keep your name and contact details in this browser for " + cfg.resumeDays + " days so you don’t have to type them again. We never save your SSN, date of birth or documents. Choose Start over to clear them." : "",
       fields:[{key:"first",label:"First name",autocomplete:"given-name",validate:vName("first name")},{key:"last",label:"Last name",autocomplete:"family-name",validate:vName("last name")}]},
     {id:"contact",  cat:1, build:"fields",    title:"What’s your contact information?", hint:"We’ll only contact you with relevant updates.",
       fields:[{key:"phone",label:"Phone number",type:"tel",inputmode:"tel",autocomplete:"tel",mask:fmtPhone,maxlength:14,placeholder:"(000) 000-0000",validate:vPhone},{key:"email",label:"Email address",type:"email",inputmode:"email",autocomplete:"email",validate:vEmail}]},
@@ -1087,14 +1145,14 @@ var KB = [
     {id:"terms",    cat:2, build:"terms",     title:"Acknowledgement"},
     {id:"sign",     cat:2, build:"sign",      title:"Signature", last:true}
   ];
-  var CAP = STEPS.map(function(x){ return x.id; }).indexOf("bizname");   /* progress is only restored up to the first personal screen */
+  var CAP = STEPS.map(function(x){ return x.id; }).indexOf("ein");   /* progress is restored up to the first screen whose answer is not remembered (EIN). Saved screens after it come back prefilled. */
   if(st.started) idx = Math.min(st.step || 0, CAP);
   function persist(){ if(st.started) K.set({step:Math.min(idx, CAP), data:safeData()}); }
 
   /* ---------- rendering ---------- */
   function swap(){ body.classList.remove("step-in"); void body.offsetWidth; if(!reduce) body.classList.add("step-in"); }
   function render(focusTitle){
-    clearTimeout(advTimer); ctrl = null; body.innerHTML = ""; swap();
+    clearTimeout(advTimer); ctrl = null; body.innerHTML = ""; body.classList.remove("thanks"); swap();
     if(K.nudges) K.nudges.hide();
     if(finished){ return renderThanks(); }
     if(!formMode && st.started){ return renderResume(); }
@@ -1118,28 +1176,51 @@ var KB = [
   function renderResume(){
     meta.hidden = true; nav.hidden = true;
     var pct = Math.max(5, Math.round(((idx+1) / STEPS.length) * 100)); bar.style.width = pct + "%"; prog.setAttribute("aria-valuenow", String(pct));
-    var h = el("h2",null,"Pick up where you left off"); body.appendChild(h);
-    body.appendChild(el("p","sub","Your $" + K.fmt(A.amount || cfg.defaultAmount) + " request is saved. You’re on " + CATS[STEPS[idx].cat].toLowerCase() + ", step " + (idx+1) + " of " + STEPS.length + ". Personal details stay only while this page is open."));
+    var h = el("h2",null, A.first ? "Welcome back, " + nice(A.first) : "Pick up where you left off"); body.appendChild(h);
+    body.appendChild(el("p","sub","Your $" + K.fmt(A.amount || cfg.defaultAmount) + " request is saved. You’re on " + CATS[STEPS[idx].cat].toLowerCase() + ", step " + (idx+1) + " of " + STEPS.length + (F.savePersonal ? ". Your name and contact details are saved in this browser. We never save your SSN, date of birth or documents." : ". Personal details stay only while this page is open.")));
     var box = el("div","resume");
     var go = el("button","btn btn-primary"); go.type = "button"; go.setAttribute("data-cta",""); go.dataset.loc = "resume"; go.dataset.start = "Get started"; go.dataset["continue"] = "Continue your application"; go.textContent = "Continue your application";
-    var so = el("button","back","Start over"); so.type = "button";
+    var so = el("button","back", F.savePersonal ? "Start over and clear saved info" : "Start over"); so.type = "button";
     so.addEventListener("click", function(){ resetAll(); render(false); });
     box.appendChild(go); box.appendChild(so); body.appendChild(box);
   }
   function renderThanks(){
     meta.hidden = true; nav.hidden = true; bar.style.width = "100%"; prog.setAttribute("aria-valuenow","100");
-    var name = A.legal || A.dba || "";
+    var first = nice(A.first), biz = A.dba || A.legal || "";
+    var need = (A.bizState==="California" || A.bizState==="New York") ? 4 : 3, nf = A.files ? A.files.length : 0;
+    body.classList.add("thanks");
     var tick = el("div","tick"); tick.innerHTML = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'; body.appendChild(tick);
-    var h = el("h2",null,"Thank you" + (name ? ", " + name : "")); h.id = "ftitle"; h.tabIndex = -1; body.appendChild(h);
-    body.appendChild(el("p","sub","Your application has been received."));
+    var h = el("h2",null,"Thank you" + (first ? ", " + first : "")); h.id = "ftitle"; h.tabIndex = -1; body.appendChild(h);
+    body.appendChild(el("p","sub","We’ve received your $" + K.fmt(A.amount || 0) + " application" + (biz ? " for " + biz : "") + "."));
+    var rows = [["Requested amount","$" + K.fmt(A.amount || 0)]];
+    if(biz) rows.push(["Business", biz]);
+    if(A.phone) rows.push(["We’ll reach you at", A.phone]);
+    rows.push(["Application status","Received"]);
     var ul = el("ul","summary");
-    [["Requested amount","$" + K.fmt(A.amount || 0)],["Application status","Received"],["Next step","A financing specialist will contact you shortly"]].forEach(function(r){ var li = el("li"); li.appendChild(el("span",null,r[0])); li.appendChild(el("span",null,r[1])); ul.appendChild(li); });
+    rows.forEach(function(r){ var li = el("li"); li.appendChild(el("span",null,r[0])); li.appendChild(el("span",null,r[1])); ul.appendChild(li); });
     body.appendChild(ul);
     if(A.email){ body.appendChild(el("p","sub","A confirmation email will be sent to " + A.email + ".")); }
-    if(A.uploadLater){ body.appendChild(el("p","sub","We’ll also email you a secure link to upload your bank statements.")); }
+
+    var note = null;
+    if(A.uploadLater){ note = ["One more thing", "We’ll email you a secure link" + (A.email ? " at " + A.email : "") + " to upload your " + need + " most recent bank statements."]; }
+    else if(nf && nf < need){ note = ["Bank statements", "We received " + nf + " of " + need + ". Your specialist may ask for the rest."]; }
+    else if(nf){ note = ["Bank statements", "We received your " + nf + " statements."]; }
+    if(note){ var nb = el("div","notice"); nb.appendChild(el("strong",null,note[0])); nb.appendChild(el("span",null,note[1])); body.appendChild(nb); }
+
+    body.appendChild(el("h3","nexth","What happens next"));
+    var ol = el("ol","nexts");
+    [["A financing specialist reviews your application", A.phone ? "They may call you at " + A.phone + (A.email ? " or email you at " + A.email : "") + "." : "They’ll reach out to you soon."],
+     ["You see your options","Decisions can come in as little as 4 hours, and you can compare up to 6 offers."],
+     ["You choose what fits","Your specialist helps you weigh your options and pick the best fit for your business."]].forEach(function(r){
+      var li = el("li"), d = el("div"); d.appendChild(el("strong",null,r[0])); d.appendChild(el("span",null,r[1])); li.appendChild(d); ol.appendChild(li);
+    });
+    body.appendChild(ol);
     if(!F.submitUrl){ body.appendChild(el("p","preview-note","Preview only: nothing was submitted or stored.")); }
-    var done = el("button","btn btn-ghost","Done"); done.type = "button"; done.style.marginTop = "14px"; done.addEventListener("click", function(){ resetAll(); leave(); });
-    body.appendChild(done); h.focus({preventScroll:true});
+    var acts = el("div","thanks-actions");
+    var call = el("a","btn btn-ghost","Call a specialist: " + cfg.phoneSales); call.href = "tel:" + cfg.phoneSalesTel;
+    var done = el("button","btn btn-primary","Done"); done.type = "button"; done.addEventListener("click", function(){ resetAll(); leave(); });
+    acts.appendChild(call); acts.appendChild(done); body.appendChild(acts);
+    h.focus({preventScroll:true});
   }
 
   /* ---------- navigation ---------- */
